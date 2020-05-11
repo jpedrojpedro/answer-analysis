@@ -1,0 +1,30 @@
+{
+  "meta" : {
+    "dataset" : "mondial",
+    "file": "mondial.rdf"
+  },
+  "questions" : [
+    {
+      "id" : "1",
+      "question" : {
+        "language" : "en",
+        "string" : "what is the number of countries per continent?",
+        "keywords" : "Country,  Continent"
+      },
+      "query" : {
+        "sparql" : "prefix mon: <http://www.semwebtech.org/mondial/10/meta#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> select ?continent (count(?country) as ?amount_countries) { ?country rdf:type mon:Country . ?country mon:encompassed ?continent } group by ?continent"
+      }
+    },
+    {
+      "id" : "2",
+      "question" : {
+        "language" : "en",
+        "string" : "what is the number of rivers per country?",
+        "keywords" : "River,  Country"
+      },
+      "query" : {
+        "sparql" : "prefix mon: <http://www.semwebtech.org/mondial/10/meta#> prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> select ?country ?name (count(?river) as ?amount_rivers) { ?river rdf:type mon:River . ?river mon:locatedIn ?country . ?country rdf:type mon:Country . ?country mon:name ?name } group by ?country ?nameorder by desc(?amount_rivers)"
+      }
+    }
+  ]
+}

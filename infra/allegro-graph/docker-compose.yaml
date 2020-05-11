@@ -1,0 +1,12 @@
+version: '3.5'
+services:
+  allegro-graph:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      shm_size: '1gb'
+    shm_size: '1gb'
+    volumes:
+      - ../../datasets:/var/datasets/
+    ports:
+      - 10035:10035
