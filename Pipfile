@@ -7,6 +7,8 @@ verify_ssl = true
 
 [packages]
 agraph-python = "==101.0.3"
+rdflib = "==5.0.0"
+SPARQLWrapper = "==1.8.5"
 
 [requires]
 python_version = "3.8"
