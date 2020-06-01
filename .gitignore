@@ -166,3 +166,7 @@ datasets/**/
 
 # Challenges
 challenges/**/
+
+# Output
+output/*
+!output/.keep

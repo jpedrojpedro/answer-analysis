@@ -1,3 +1,4 @@
+import re
 import json
 from SPARQLWrapper import SPARQLWrapper, JSON
 from pathlib import Path
@@ -16,8 +17,17 @@ def parse_endpoint_and_questions(dataset='musicbrainz', meta=False):
     return endpoint, info['questions']
 
 
+def separate_prefix_and_class(uri):
+    regex = r'^([a-z0-9\/.:-]+)((\/|#)[a-zA-Z0-9]+)$'
+    res = re.search(regex, uri)
+    prefix = res.group(1)
+    klass = res.group(2)
+    return prefix, klass
+
+
 if __name__ == '__main__':
     try:
+        folder = Path('./output')
         url, questions = parse_endpoint_and_questions(meta=True)
         sparql = SPARQLWrapper(url)
         for question in questions:
@@ -27,11 +37,17 @@ if __name__ == '__main__':
             results = output['results']['bindings']
             print("{}: {} results found".format(question['id'], len(results)))
             if len(results) > 0:
-                keys = results[0].keys()
-                template = ' | '.join(['{:40}'] * len(keys))
-                print(template.format(*keys))
-                for result in results:
-                    print(template.format(*[result[key]['value'] for key in keys]))
+                file = folder / (question['id'] + '.out')
+                with open(file, 'w') as fp:
+                    keys = results[0].keys()
+                    template = ' | '.join(['{:40}'] * len(keys))
+                    line = template.format(*keys)
+                    print(line)
+                    fp.write(line + '\n')
+                    for result in results:
+                        line = template.format(*[result[key]['value'] for key in keys])
+                        print(line)
+                        fp.write(line + '\n')
     # TODO: handle exceptions raised by sparql.query()
     except FileNotFoundError as e1:
         print(e1)
