@@ -4,8 +4,12 @@
     "endpoint": "http://dbtune.org/jamendo/sparql/",
     "questions": [
       {
-        "id": "available-classes",
+        "id": "classes",
         "question": "select distinct ?class { ?s a ?class }"
+      },
+      {
+        "id": "relationships",
+        "question": "select distinct (\"{class_1}\" as ?c1) ?r1 (\"{class_2}\" as ?c2) ?r2 (\"{class_1}\" as ?c3) { ?v1 a {class_1} . ?v2 a {class_2} . { ?v1 ?r1 ?v2 } union { ?v2 ?r2 ?v1 } }"
       }
     ]
   },

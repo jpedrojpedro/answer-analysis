@@ -2,6 +2,7 @@ import re
 import json
 from SPARQLWrapper import SPARQLWrapper, JSON
 from pathlib import Path
+import steps
 
 
 def parse_endpoint_and_questions(dataset='musicbrainz', meta=False):
@@ -26,6 +27,8 @@ def separate_prefix_and_class(uri):
 
 
 if __name__ == '__main__':
+    steps.start()
+    exit(0)
     try:
         folder = Path('./output')
         url, questions = parse_endpoint_and_questions(meta=True)
