@@ -162,11 +162,12 @@ crashlytics-build.properties
 fabric.properties
 
 # Datasets
-datasets/**/
+datasets/internal/*
+!datasets/internal/.keep
 
 # Challenges
 challenges/**/
 
 # Output
-output/*
+statistics/*
 !output/.keep
