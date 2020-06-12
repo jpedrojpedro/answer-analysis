@@ -1,3 +1,4 @@
+import jsonlines
 from SPARQLWrapper import SPARQLWrapper, JSON
 
 
@@ -25,11 +26,10 @@ class SparqlConnector:
             line = template.format(*[result.get(key, {'value': ''})['value'] for key in keys])
             print(line)
 
-    def persist_results(self, filename):
+    def persist_results(self, filename, append=False):
         if not self.results:
             return
-        with open(filename, 'w') as fp:
+        with jsonlines.open(filename, 'w' if not append else 'a') as fp:
             for result in self.results:
-                for key, values in result.items():
-                    d = {key: values.get('value', '')}
-                    fp.write(str(d) + '\n')
+                d = {key: result[key]['value'] for key in result.keys()}
+                fp.write(d)

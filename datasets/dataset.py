@@ -21,6 +21,3 @@ class Dataset:
         attrs.remove('name')
         for attr in attrs:
             setattr(self, attr, config.items(attr))
-
-    def run(self):
-        raise NotImplementedError

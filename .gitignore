@@ -169,5 +169,5 @@ datasets/internal/*
 challenges/**/
 
 # Output
-statistics/*
-!output/.keep
+graph_analysis/*
+!graph_analysis/.keep
