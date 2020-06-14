@@ -16,6 +16,7 @@ class GraphStatistics:
         self.dataset = dataset
         self.conn = conn
         self.classes = None
+        self.instances = None
 
     def run(self):
         # TODO: implement some kind of progress bar
@@ -44,6 +45,7 @@ class GraphStatistics:
             tquery = Template(query)
             self.conn.execute_query(tquery.substitute(klass=klass['class']))
             self.conn.persist_results(filename, append=True)
+        self.instances = read_jsonl(filename)
 
     def _run_relationships(self):
         queries = [query for name, query in self.dataset.statistics if name == 'relationships']
@@ -56,9 +58,21 @@ class GraphStatistics:
                 if klass_1 == klass_2:
                     continue
                 try:
-                    print("{} vs {}".format(klass_1, klass_2))
+                    k1 = klass_1['class']
+                    k2 = klass_2['class']
+                    print("{} vs {}".format(k1, k2))
+                    i1 = [instance for instance in self.instances if instance['class'] == k1]
+                    i2 = [instance for instance in self.instances if instance['class'] == k2]
+                    a1 = int(i1[0]['amount'])
+                    a2 = int(i2[0]['amount'])
+                    l1 = a1 // 10 if a1 >= 10 else a1
+                    l2 = a2 // 10 if a2 >= 10 else a2
                     tquery = Template(query)
-                    self.conn.execute_query(tquery.substitute(klass_1=klass_1['class'], klass_2=klass_2['class']))
+                    self.conn.execute_query(
+                        tquery.substitute(
+                            klass_1=k1, klass_2=k2, limit_k1=l1, limit_k2=l2
+                        )
+                    )
                     self.conn.persist_results(filename, append=True)
                 # TODO: improve this exception handling
                 except Exception:
