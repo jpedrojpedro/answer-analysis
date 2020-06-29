@@ -42,11 +42,19 @@ class GraphStatistics:
             return
         filename = Path('graph_analysis', 'results', 'instances.jsonl')
         query = queries[0]
-        for klass in self.classes:
-            tquery = Template(query)
-            self.conn.execute_query(tquery.substitute(klass=klass['class']))
-            self.conn.persist_results(filename, append=True)
-        self.instances = read_jsonl(filename)
+        self.conn.execute_query(query)
+        self.conn.persist_results(filename)
+        self.classes = read_jsonl(filename)
+
+    def _run_predicates(self):
+        queries = [query for name, query in self.dataset.statistics if name == 'predicates']
+        if len(queries) == 0:
+            return
+        filename = Path('graph_analysis', 'results', 'predicates.jsonl')
+        query = queries[0]
+        self.conn.execute_query(query)
+        self.conn.persist_results(filename)
+        self.classes = read_jsonl(filename)
 
     def _run_relationships(self):
         queries = [query for name, query in self.dataset.statistics if name == 'relationships']
@@ -78,16 +86,6 @@ class GraphStatistics:
                 # TODO: improve this exception handling
                 except Exception:
                     continue
-
-    def _run_predicates(self):
-        queries = [query for name, query in self.dataset.statistics if name == 'predicates']
-        if len(queries) == 0:
-            return
-        filename = Path('graph_analysis', 'results', 'predicates.jsonl')
-        query = queries[0]
-        self.conn.execute_query(query)
-        self.conn.persist_results(filename)
-        self.classes = read_jsonl(filename)
 
     def _clear_analysis(self):
         folder = Path('graph_analysis', 'results')
