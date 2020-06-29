@@ -8,10 +8,10 @@ class SparqlConnector:
         self.sparql = SPARQLWrapper(self.endpoint)
         self.results = None
 
-    # TODO: try to set timeout
     def execute_query(self, question, output=JSON):
         self.sparql.setQuery(question)
         self.sparql.setReturnFormat(output)
+        self.sparql.setTimeout(600000)  # 10 minutes
         results = self.sparql.queryAndConvert()
         self.results = results['results']['bindings']
 

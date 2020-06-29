@@ -10,7 +10,7 @@ def read_jsonl(filename):
 
 
 class GraphStatistics:
-    STEPS = ['classes', 'instances', 'relationships']
+    STEPS = ['classes', 'instances', 'predicates', 'relationships']
 
     def __init__(self, dataset, conn):
         self.dataset = dataset
@@ -23,7 +23,8 @@ class GraphStatistics:
         self._clear_analysis()
         self._run_classes()
         self._run_instances()
-        self._run_relationships()
+        self._run_predicates()
+        # self._run_relationships()
 
     def _run_classes(self):
         queries = [query for name, query in self.dataset.statistics if name == 'classes']
@@ -77,6 +78,16 @@ class GraphStatistics:
                 # TODO: improve this exception handling
                 except Exception:
                     continue
+
+    def _run_predicates(self):
+        queries = [query for name, query in self.dataset.statistics if name == 'predicates']
+        if len(queries) == 0:
+            return
+        filename = Path('graph_analysis', 'results', 'predicates.jsonl')
+        query = queries[0]
+        self.conn.execute_query(query)
+        self.conn.persist_results(filename)
+        self.classes = read_jsonl(filename)
 
     def _clear_analysis(self):
         folder = Path('graph_analysis', 'results')

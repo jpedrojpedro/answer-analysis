@@ -162,8 +162,10 @@ crashlytics-build.properties
 fabric.properties
 
 # Datasets
-datasets/internal/*
-!datasets/internal/.keep
+datasets/linkedbrainz-201712
+datasets/mondial
+datasets/musicbrainz
+datasets/udbms
 
 # Challenges
 challenges/**/

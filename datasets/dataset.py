@@ -11,7 +11,7 @@ class Dataset:
         self.boilerplate = None
 
     def parse(self):
-        folder = Path('./datasets/external')
+        folder = Path('./datasets/config')
         file = folder / (self.name + '.ini')
         if not file.exists():
             raise FileNotFoundError('Unknown File: ' + str(file))
