@@ -10,7 +10,7 @@ def read_jsonl(filename):
 
 
 class GraphStatistics:
-    STEPS = ['classes', 'instances', 'predicates', 'relationships']
+    STEPS = ['classes', 'instances', 'predicates', 'properties', 'relationships']
 
     def __init__(self, dataset, conn):
         self.dataset = dataset
@@ -24,6 +24,7 @@ class GraphStatistics:
         self._run_classes()
         self._run_instances()
         self._run_predicates()
+        self._run_properties()
         # self._run_relationships()
 
     def _run_classes(self):
@@ -44,7 +45,7 @@ class GraphStatistics:
         query = queries[0]
         self.conn.execute_query(query)
         self.conn.persist_results(filename)
-        self.classes = read_jsonl(filename)
+        self.instances = read_jsonl(filename)
 
     def _run_predicates(self):
         queries = [query for name, query in self.dataset.statistics if name == 'predicates']
@@ -54,7 +55,18 @@ class GraphStatistics:
         query = queries[0]
         self.conn.execute_query(query)
         self.conn.persist_results(filename)
-        self.classes = read_jsonl(filename)
+
+    def _run_properties(self):
+        queries = [query for name, query in self.dataset.statistics if name == 'properties']
+        if len(queries) == 0:
+            return
+        filename = Path('graph_analysis', 'results', 'properties.jsonl')
+        query = queries[0]
+        for klass in self.classes:
+            k = klass['class']
+            tquery = Template(query)
+            self.conn.execute_query(tquery.substitute(klass=k))
+            self.conn.persist_results(filename, append=True)
 
     def _run_relationships(self):
         queries = [query for name, query in self.dataset.statistics if name == 'relationships']
