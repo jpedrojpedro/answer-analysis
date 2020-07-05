@@ -5,7 +5,8 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ../../datasets/internal:/usr/share/proj/datasets
+      - ../../datasets/linkedbrainz-201712:/usr/share/proj/linkedbrainz
+      - ../../datasets/musicbrainz-20131125:/usr/share/proj/musicbrainz
     ports:
       - 1111:1111
       - 8890:8890

@@ -17,6 +17,7 @@ class GraphStatistics:
         self.conn = conn
         self.classes = None
         self.instances = None
+        self.predicates = None
 
     def run(self):
         # TODO: implement some kind of progress bar
@@ -55,6 +56,7 @@ class GraphStatistics:
         query = queries[0]
         self.conn.execute_query(query)
         self.conn.persist_results(filename)
+        self.predicates = read_jsonl(filename)
 
     def _run_properties(self):
         queries = [query for name, query in self.dataset.statistics if name == 'properties']

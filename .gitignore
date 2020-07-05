@@ -164,7 +164,7 @@ fabric.properties
 # Datasets
 datasets/linkedbrainz-201712
 datasets/mondial
-datasets/musicbrainz
+datasets/musicbrainz-20131125
 datasets/udbms
 
 # Challenges
