@@ -5,10 +5,9 @@ from configparser import ConfigParser
 class Dataset:
     def __init__(self, name):
         self.name = name
-        self.endpoints = None
-        self.statistics = None
-        self.questions = None
-        self.boilerplate = None
+        self.endpoints = {}
+        self.statistics = {}
+        self.questions = []
 
     def parse(self):
         folder = Path('./datasets/config')
@@ -19,5 +18,12 @@ class Dataset:
         config.read(file)
         attrs = list(self.__dict__.keys())
         attrs.remove('name')
-        for attr in attrs:
-            setattr(self, attr, config.items(attr))
+        for section in config.sections():
+            if section in attrs:
+                item = {item[0]: item[1] for item in config.items(section)}
+                curr = getattr(self, section)
+                curr.update(item)
+                setattr(self, section, curr)
+                continue
+            item = {item[0]: item[1] for item in config.items(section)}
+            self.questions.append(item)
