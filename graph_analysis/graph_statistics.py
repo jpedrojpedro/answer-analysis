@@ -22,12 +22,18 @@ class GraphStatistics:
         for step in self.STEPS:
             self._run_step(step)
 
+    def load(self):
+        for step in self.STEPS:
+            filename = Path('graph_analysis', 'results', step + '.jsonl')
+            if not filename.exists():
+                continue
+            setattr(self, step, read_jsonl(filename))
+
     def _run_step(self, step_name):
-        queries = [query for name, query in self.dataset.statistics if name == step_name]
-        if len(queries) == 0:
+        query = self.dataset.statistics.get(step_name)
+        if query is None:
             return
         filename = Path('graph_analysis', 'results', step_name + '.jsonl')
-        query = queries[0]
         self.conn.execute_query(query)
         self.conn.persist_results(filename)
         setattr(self, step_name, read_jsonl(filename))

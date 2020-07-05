@@ -8,4 +8,5 @@ if __name__ == '__main__':
     dataset.parse()
     conn = SparqlConnector(dataset.endpoints['linkedbrainz'])
     gs = GraphStatistics(dataset, conn)
-    gs.run()
+    # gs.run()
+    gs.load()
