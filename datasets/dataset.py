@@ -2,6 +2,17 @@ from pathlib import Path
 from configparser import ConfigParser
 
 
+class Question:
+    def __init__(self, q_ini, prefixes):
+        self.question = q_ini['question']
+        self.keywords = q_ini['keywords']
+        self.query = q_ini['query']
+        self.prefixes = ["PREFIX {}: <{}>".format(prefix, uri) for prefix, uri in prefixes.items()]
+
+    def display_prefixes(self):
+        return '\n'.join(self.prefixes)
+
+
 class Dataset:
     def __init__(self, name):
         self.name = name
@@ -18,12 +29,16 @@ class Dataset:
         config.read(file)
         attrs = list(self.__dict__.keys())
         attrs.remove('name')
+        # may raise error
+        prefixes = {item[0]: item[1] for item in config.items('prefixes')}
         for section in config.sections():
+            if section == 'prefixes':
+                continue
+            item = {item[0]: item[1] for item in config.items(section)}
             if section in attrs:
-                item = {item[0]: item[1] for item in config.items(section)}
                 curr = getattr(self, section)
                 curr.update(item)
                 setattr(self, section, curr)
                 continue
-            item = {item[0]: item[1] for item in config.items(section)}
-            self.questions.append(item)
+            question = Question(item, prefixes)
+            self.questions.append(question)

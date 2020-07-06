@@ -1,11 +1,5 @@
-import jsonlines
+from helper import read_jsonl
 from pathlib import Path
-
-
-def read_jsonl(filename):
-    with jsonlines.open(filename) as fp:
-        jlist = [jline for jline in fp.iter(type=dict)]
-    return jlist
 
 
 class GraphStatistics:
