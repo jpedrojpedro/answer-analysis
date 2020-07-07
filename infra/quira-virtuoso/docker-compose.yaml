@@ -1,11 +1,11 @@
 version: '3.5'
 services:
-  openlink-virtuoso:
+  quira-virtuoso:
     build:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ../../datasets/linkedbrainz-201712:/usr/share/proj/linkedbrainz
+      - ../../datasets/quira-brainz:/usr/share/proj/quira
     ports:
       - 1111:1111
       - 8890:8890

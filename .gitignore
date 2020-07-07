@@ -165,10 +165,12 @@ fabric.properties
 datasets/linkedbrainz-201712
 datasets/mondial
 datasets/musicbrainz-20131125
+datasets/quira-brainz
 datasets/udbms
 
 # Challenges
 challenges/**/
+challenges/filter_questions.py
 
 # Output
 graph_analysis/results/*
