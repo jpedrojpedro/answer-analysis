@@ -2,6 +2,7 @@ from pathlib import Path
 from configparser import ConfigParser
 
 
+# TODO: implement dataclasses
 class Question:
     def __init__(self, q_ini, prefixes):
         self.question = q_ini['question']
@@ -14,14 +15,15 @@ class Question:
 
 
 class Dataset:
-    def __init__(self, name):
+    def __init__(self, name, folder='./datasets/config'):
         self.name = name
+        self.folder = folder
         self.endpoints = {}
         self.statistics = {}
         self.questions = []
 
     def parse(self):
-        folder = Path('./datasets/config')
+        folder = Path(self.folder)
         file = folder / (self.name + '.ini')
         if not file.exists():
             raise FileNotFoundError('Unknown File: ' + str(file))

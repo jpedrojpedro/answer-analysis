@@ -4,6 +4,7 @@ from graph_analysis.graph_statistics import GraphStatistics
 from heuristics.enrich import Enrich
 
 
+# TODO: implement like Rake-Rails
 if __name__ == '__main__':
     dataset = Dataset('musicbrainz')
     dataset.parse()
