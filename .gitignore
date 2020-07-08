@@ -175,3 +175,6 @@ challenges/filter_questions.py
 # Output
 graph_analysis/results/*
 !graph_analysis/results/.keep
+
+# MacOS
+.DS_Store
