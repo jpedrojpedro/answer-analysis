@@ -7,11 +7,11 @@ class Enrich:
     REGEX_VARIABLE = r"(SELECT\s+|DISTINCT\s+)(\?[a-zA-Z_]+)(\sFROM\s+[a-z<>:\/.]+\s+|\s+WHERE)"
     SPARQL_TEMPLATE = """
         $prefixes
-        select distinct $variable ?p ?o
+        select distinct $variable ?predicate ?object
         where {
           { $subquery }
-          $variable ?p ?o .
-          filter(isLiteral(?o)) .
+          $variable ?predicate ?object .
+          filter(isLiteral(?object)) .
         }
     """
 
@@ -20,14 +20,13 @@ class Enrich:
         self.question = question
         self.variable = None
         self.enriched_query = None
-        self.results = None
 
     def apply(self):
         self._set_variable()
         self._set_enriched_query()
         sq = SparqlQuery(self.endpoint, self.enriched_query)
         df = sq.execute()
-        self.results = df
+        return df
 
     def _set_variable(self):
         result = re.search(self.REGEX_VARIABLE, self.question.query, re.IGNORECASE)

@@ -1,6 +1,7 @@
+import pandas as pd
 from pathlib import Path
 from endpoints.sparql_query import SparqlQuery
-from helper import read_jsonl, persist_results
+from helper import persist_results
 
 
 class GraphStatistics:
@@ -22,7 +23,7 @@ class GraphStatistics:
             filename = Path('graph_analysis', 'results', step + '.jsonl')
             if not filename.exists():
                 continue
-            setattr(self, step, read_jsonl(filename))
+            setattr(self, step, pd.read_json(filename, lines=True))
 
     def _run_step(self, step_name):
         query = self.dataset.statistics.get(step_name)
