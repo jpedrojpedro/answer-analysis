@@ -1,7 +1,6 @@
 import re
-import tempfile
 from string import Template
-from helper import read_jsonl
+from endpoints.sparql_query import SparqlQuery
 
 
 class Enrich:
@@ -16,9 +15,9 @@ class Enrich:
         }
     """
 
-    def __init__(self, question, conn):
+    def __init__(self, endpoint, question):
+        self.endpoint = endpoint
         self.question = question
-        self.conn = conn
         self.variable = None
         self.enriched_query = None
         self.results = None
@@ -26,10 +25,9 @@ class Enrich:
     def apply(self):
         self._set_variable()
         self._set_enriched_query()
-        self.conn.execute_query(self.enriched_query)
-        tmp_file = tempfile.TemporaryFile()
-        self.conn.persist_results(tmp_file)
-        self.results = read_jsonl(tmp_file)
+        sq = SparqlQuery(self.endpoint, self.enriched_query)
+        df = sq.execute()
+        self.results = df
 
     def _set_variable(self):
         result = re.search(self.REGEX_VARIABLE, self.question.query, re.IGNORECASE)

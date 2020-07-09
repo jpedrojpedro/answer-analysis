@@ -1,13 +1,14 @@
-from helper import read_jsonl
 from pathlib import Path
+from endpoints.sparql_query import SparqlQuery
+from helper import read_jsonl, persist_results
 
 
 class GraphStatistics:
     STEPS = ['resources', 'predicates']
 
-    def __init__(self, dataset, conn):
+    def __init__(self, endpoint, dataset):
+        self.endpoint = endpoint
         self.dataset = dataset
-        self.conn = conn
         for step in self.STEPS:
             setattr(self, step, None)
 
@@ -28,9 +29,10 @@ class GraphStatistics:
         if query is None:
             return
         filename = Path('graph_analysis', 'results', step_name + '.jsonl')
-        self.conn.execute_query(query)
-        self.conn.persist_results(filename)
-        setattr(self, step_name, read_jsonl(filename))
+        sq = SparqlQuery(self.endpoint, query)
+        df = sq.execute()
+        persist_results(df, filename)
+        setattr(self, step_name, df)
 
     def _clear_analysis(self):
         folder = Path('graph_analysis', 'results')

@@ -5,17 +5,17 @@ from datasets.dataset import Dataset, Question
 
 class DatasetTest(unittest.TestCase):
     def test_parse_raises_exception_file_not_found(self):
-        dataset = Dataset('foo', './tests/datasets/config')
+        dataset = Dataset('foo', './tests/endpoints/config')
         with self.assertRaises(FileNotFoundError):
             dataset.parse()
 
     def test_parse_raises_exception_no_section(self):
-        dataset = Dataset('bar', './tests/datasets/config')
+        dataset = Dataset('bar', './tests/endpoints/config')
         with self.assertRaises(configparser.NoSectionError):
             dataset.parse()
 
     def test_parse_valid_instance(self):
-        dataset = Dataset('got', './tests/datasets/config')
+        dataset = Dataset('got', './tests/endpoints/config')
         dataset.parse()
         self.assertIn('got', dataset.endpoints)
         self.assertEqual(1, len(dataset.questions))
