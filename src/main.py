@@ -12,16 +12,24 @@ def match_predicates(df_enriched, df_pred_stats):
 
 
 # TODO: implement like Rake-Rails
+class Main:
+    def __init__(self, dataset='musicbrainz'):
+        self.dataset = dataset
+
+    def run(self):
+        dataset = Dataset(self.dataset)
+        dataset.parse()
+        endpoint = dataset.endpoints['linkedbrainz']
+        gs = GraphStatistics(endpoint, dataset)
+        gs.run()
+        for idx, question in enumerate(dataset.questions, start=1):
+            print("----------{}----------".format(idx))
+            print("Question: {}".format(question.question))
+            enrich = Enrich(endpoint, question)
+            dfe = enrich.apply()
+            df_match = match_predicates(dfe, gs.predicates)
+            print(df_match.head(20))
+
+
 if __name__ == '__main__':
-    dataset = Dataset('musicbrainz')
-    dataset.parse()
-    endpoint = dataset.endpoints['linkedbrainz']
-    gs = GraphStatistics(endpoint, dataset)
-    gs.run()
-    for idx, question in enumerate(dataset.questions, start=1):
-        print("----------{}----------".format(idx))
-        print("Question: {}".format(question.question))
-        enrich = Enrich(endpoint, question)
-        dfe = enrich.apply()
-        df_match = match_predicates(dfe, gs.predicates)
-        print(df_match.head(20))
+    Main().run()
