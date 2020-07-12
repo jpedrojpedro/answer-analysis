@@ -1,15 +1,16 @@
 import pandas as pd
 from pathlib import Path
-from endpoints.sparql_query import SparqlQuery
-from helper import persist_results
+from src.endpoints.sparql_query import SparqlQuery
+from src.helper import persist_results
 
 
 class GraphStatistics:
     STEPS = ['resources', 'predicates']
 
-    def __init__(self, endpoint, dataset):
+    def __init__(self, endpoint, dataset, dest_folder='./src/graph_analysis/results'):
         self.endpoint = endpoint
         self.dataset = dataset
+        self.dest_folder = dest_folder
         for step in self.STEPS:
             setattr(self, step, None)
 
@@ -20,7 +21,8 @@ class GraphStatistics:
 
     def load(self):
         for step in self.STEPS:
-            filename = Path('graph_analysis', 'results', step + '.jsonl')
+            folder = Path(self.dest_folder)
+            filename = folder / (step + '.jsonl')
             if not filename.exists():
                 continue
             setattr(self, step, pd.read_json(filename, lines=True))
@@ -29,14 +31,15 @@ class GraphStatistics:
         query = self.dataset.statistics.get(step_name)
         if query is None:
             return
-        filename = Path('graph_analysis', 'results', step_name + '.jsonl')
+        folder = Path(self.dest_folder)
+        filename = folder / (step_name + '.jsonl')
         sq = SparqlQuery(self.endpoint, query)
         df = sq.execute()
         persist_results(df, filename)
         setattr(self, step_name, df)
 
     def _clear_analysis(self):
-        folder = Path('graph_analysis', 'results')
+        folder = Path(self.dest_folder)
         for step in self.STEPS:
             filename = folder / (step + '.jsonl')
             if not filename.exists():

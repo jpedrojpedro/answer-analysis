@@ -1,7 +1,7 @@
 import pandas as pd
-from datasets.dataset import Dataset
-from graph_analysis.graph_statistics import GraphStatistics
-from heuristics.enrich import Enrich
+from src.endpoints.dataset import Dataset
+from src.graph_analysis.graph_statistics import GraphStatistics
+from src.heuristics.enrich import Enrich
 
 
 def match_predicates(df_enriched, df_pred_stats):
@@ -17,7 +17,7 @@ if __name__ == '__main__':
     dataset.parse()
     endpoint = dataset.endpoints['linkedbrainz']
     gs = GraphStatistics(endpoint, dataset)
-    gs.load()  # gs.run()
+    gs.run()
     for idx, question in enumerate(dataset.questions, start=1):
         print("----------{}----------".format(idx))
         print("Question: {}".format(question.question))

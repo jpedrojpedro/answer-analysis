@@ -15,7 +15,7 @@ class Question:
 
 
 class Dataset:
-    def __init__(self, name, folder='./endpoints/config'):
+    def __init__(self, name, folder='./src/endpoints/config'):
         self.name = name
         self.folder = folder
         self.endpoints = {}

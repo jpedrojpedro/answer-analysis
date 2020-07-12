@@ -1,6 +1,6 @@
 import re
 from string import Template
-from endpoints.sparql_query import SparqlQuery
+from src.endpoints.sparql_query import SparqlQuery
 
 
 class Enrich:

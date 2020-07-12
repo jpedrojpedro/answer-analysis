@@ -162,19 +162,16 @@ crashlytics-build.properties
 fabric.properties
 
 # Datasets
-datasets/linkedbrainz-201712
-datasets/mondial
-datasets/musicbrainz-20131125
-datasets/quira-brainz
-datasets/udbms
+datasets/**/
+datasets/split_files.py
 
 # Challenges
 challenges/**/
 challenges/filter_questions.py
 
 # Output
-graph_analysis/results/*
-!graph_analysis/results/.keep
+src/graph_analysis/results/*
+!src/graph_analysis/results/.keep
 
 # MacOS
 .DS_Store

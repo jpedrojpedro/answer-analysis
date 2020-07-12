@@ -1,6 +1,6 @@
 import unittest
 import configparser
-from datasets.dataset import Dataset, Question
+from src.endpoints.dataset import Dataset, Question
 
 
 class DatasetTest(unittest.TestCase):
