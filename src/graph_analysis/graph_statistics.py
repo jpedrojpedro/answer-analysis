@@ -14,12 +14,15 @@ class GraphStatistics:
         for step in self.STEPS:
             setattr(self, step, None)
 
-    def run(self):
+    def run(self, load=False):
+        if load:
+            self._load()
+            return
         self._clear_analysis()
         for step in self.STEPS:
             self._run_step(step)
 
-    def load(self):
+    def _load(self):
         for step in self.STEPS:
             folder = Path(self.dest_folder)
             filename = folder / (step + '.jsonl')
