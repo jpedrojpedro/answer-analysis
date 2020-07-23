@@ -3,7 +3,7 @@ from string import Template
 from src.endpoints.sparql_query import SparqlQuery
 
 
-class Enrich:
+class Tabulate:
     REGEX_VARIABLE = r"(SELECT\s+|DISTINCT\s+)(\?[a-zA-Z_]+)(\sFROM\s+[a-z<>:\/.]+\s+|\s+WHERE)"
     SPARQL_TEMPLATE = """
         $prefixes
@@ -23,7 +23,7 @@ class Enrich:
 
     def apply(self):
         self._set_variable()
-        self._set_enriched_query()
+        self._set_tabulated_query()
         sq = SparqlQuery(self.endpoint, self.enriched_query)
         df = sq.execute()
         return df
@@ -34,7 +34,7 @@ class Enrich:
             return
         self.variable = result.group(2)
 
-    def _set_enriched_query(self):
+    def _set_tabulated_query(self):
         template = Template(self.SPARQL_TEMPLATE)
         self.enriched_query = template.substitute(
             prefixes=self.question.display_prefixes(), variable=self.variable, subquery=self.question.query

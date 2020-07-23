@@ -1,7 +1,7 @@
 import pandas as pd
 from src.endpoints.dataset import Dataset
 from src.graph_analysis.graph_statistics import GraphStatistics
-from src.heuristics.enrich import Enrich
+from src.enrichment.tabulate import Tabulate
 
 
 def match_predicates(df_enriched, df_pred_stats):
@@ -25,7 +25,7 @@ class Main:
         for idx, question in enumerate(dataset.questions, start=1):
             print("----------{}----------".format(idx))
             print("Question: {}".format(question.question))
-            enrich = Enrich(endpoint, question)
+            enrich = Tabulate(endpoint, question)
             dfe = enrich.apply()
             df_match = match_predicates(dfe, gs.predicates)
             print(df_match.head(20))
