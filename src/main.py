@@ -22,12 +22,13 @@ class Main:
             print("Question: {}".format(question.question))
             tabulate = Tabulate(endpoint, question)
             dft = tabulate.apply()
-            ranking = Ranking(dft)
-            dfr = ranking.apply()
             frequency = Frequency(dft, gs.predicates)
             dff = frequency.apply()
             new_question = NewQuestion(dft, dff)
             new_question.generate()
+            # TODO: step ranking only called when no new question can be formulated
+            ranking = Ranking(dft)
+            dfr = ranking.apply()
 
 
 if __name__ == '__main__':
