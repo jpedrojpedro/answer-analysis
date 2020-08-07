@@ -3,6 +3,7 @@ from src.graph_analysis.graph_statistics import GraphStatistics
 from src.enrichment.tabulate import Tabulate
 from src.enrichment.ranking import Ranking
 from src.enrichment.frequency import Frequency
+from src.enrichment.new_question import NewQuestion
 
 
 # TODO: implement like Rake-Rails
@@ -25,6 +26,8 @@ class Main:
             dfr = ranking.apply()
             frequency = Frequency(dft, gs.predicates)
             dff = frequency.apply()
+            new_question = NewQuestion(dft, dff)
+            new_question.generate()
 
 
 if __name__ == '__main__':
