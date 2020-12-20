@@ -2,7 +2,8 @@ import pandas as pd
 
 
 class Ranking:
-    URI_INFORANK = 'http://www.brainz.quira/inforank'
+    # TODO: change this URI
+    URI_INFORANK = 'http://www.imdb.quira/inforank'
 
     def __init__(self, df_tabulated):
         self.df = df_tabulated

@@ -8,13 +8,13 @@ from src.enrichment.new_question import NewQuestion
 
 # TODO: implement like Rake-Rails
 class Main:
-    def __init__(self, dataset='musicbrainz'):
+    def __init__(self, dataset='musicbrainz.ini'):
         self.dataset = dataset
 
     def run(self):
         dataset = Dataset(self.dataset)
         dataset.parse()
-        endpoint = dataset.endpoints['linkedbrainz']
+        endpoint = dataset.endpoint
         gs = GraphStatistics(endpoint, dataset)
         gs.run(load=True)
         for idx, question in enumerate(dataset.questions, start=1):
@@ -32,4 +32,5 @@ class Main:
 
 
 if __name__ == '__main__':
-    Main().run()
+    config = input("Informe a branch desejada (imdb.json):\t") or 'imdb.json'
+    Main(config).run()

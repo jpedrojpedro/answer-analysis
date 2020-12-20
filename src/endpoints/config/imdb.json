@@ -1,0 +1,20 @@
+{
+  "endpoint": "http://localhost:8890/sparql/",
+  "statistics": {
+    "resources": "select ?resource (count(*) as ?frequency) from <http://www.imdb.quira> where { [] a ?resource } group by ?resource order by desc(?frequency)",
+    "predicates": "select ?predicate (count(*) as ?frequency) from <http://www.imdb.quira> where { [] ?predicate ?obj . filter(isLiteral(?obj)) . } group by ?predicate order by desc(?frequency)"
+  },
+  "prefixes": {
+    "quira": "http://www.imdb.quira/",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "owl": "http://www.w3.org/2002/07/owl#"
+  },
+  "questions": [
+    {
+      "question": "Give me all movies by Denzel Washington",
+      "keywords": "Denzel Washington, movie",
+      "query": "select distinct ?movie from <http://www.imdb.quira> where { ?movie a quira:Movie . ?movie quira:actor ?actor . ?actor quira:name \"Denzel Washington\" . }"
+    }
+  ]
+}
