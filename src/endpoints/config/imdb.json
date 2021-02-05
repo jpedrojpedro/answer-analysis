@@ -15,6 +15,11 @@
       "question": "Give me all movies by Denzel Washington",
       "keywords": "Denzel Washington, movie",
       "query": "select distinct ?movie from <http://www.imdb.quira> where { ?movie a quira:Movie . ?movie quira:actor ?actor . ?actor quira:name \"Denzel Washington\" . }"
+    },
+    {
+      "question": "Give me all spanish language work",
+      "keywords": "language, spanish, work",
+      "query": "select distinct ?work from <http://www.imdb.quira> where { ?work a quira:Work . ?work quira:language ?lang . ?lang rdfs:label \"Spanish\" . }"
     }
   ]
 }
