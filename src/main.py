@@ -16,6 +16,8 @@ class Main:
         dataset.parse()
         endpoint = dataset.endpoint
         gs = GraphStatistics(endpoint, dataset)
+        # TODO: change the persistence logic of statistics
+        # when runs IMBd it overwrites the Brainz data and vice-versa
         gs.run(load=True)
         for idx, question in enumerate(dataset.questions, start=1):
             print("----------{}----------".format(idx))

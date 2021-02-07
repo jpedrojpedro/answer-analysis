@@ -22,57 +22,52 @@
     {
       "question": "Give me all bands whose name starts with The.",
       "keywords": "band, name, start, The",
-      "query": "SELECT DISTINCT ?artist FROM <http://musicbrainz.org> WHERE { ?artist rdf:type mo:MusicGroup . ?artist foaf:name ?name . FILTER (regex(?name, '^The ')) "
+      "query": "SELECT DISTINCT ?artist FROM <http://musicbrainz.org> WHERE { ?artist rdf:type mo:MusicGroup . ?artist foaf:name ?name . FILTER (regex(?name, '^The ')) . }"
     },
     {
       "question": "Give me all songs by Gojira.",
       "keywords": "Gojira, song",
-      "query": "SELECT DISTINCT ?song FROM <http://musicbrainz.org> WHERE { ?song rdf:type mo:Track . ?artist foaf:made ?song . ?artist foaf:name 'Gojira' ."
+      "query": "SELECT DISTINCT ?song FROM <http://musicbrainz.org> WHERE { ?song rdf:type mo:Track . ?artist foaf:made ?song . ?artist foaf:name 'Gojira' . }"
     },
     {
       "question": "Give me all songs by Aretha Franklin.",
       "keywords": "Aretha Franklin, song",
-      "query": "SELECT DISTINCT ?track FROM <http://musicbrainz.org> WHERE { ?artist foaf:name 'Aretha Franklin' . ?artist foaf:made ?track . ?track rdf:type mo:Track ."
+      "query": "SELECT DISTINCT ?track FROM <http://musicbrainz.org> WHERE { ?artist foaf:name 'Aretha Franklin' . ?artist foaf:made ?track . ?track rdf:type mo:Track . }"
     },
     {
       "question": "Which songs by Miles Davis are longer than 20 minutes?",
       "keywords": "Miles Davis, song, length over 20 minutes",
-      "query": "SELECT DISTINCT ?track FROM <http://musicbrainz.org> FROM <http://musicbrainz.org> WHERE { ?track rdf:type mo:Track . ?artist foaf:made ?track . ?artist foaf:name 'Miles Davis' . ?track mo:duration ?duration . FILTER( ?duration > 1200000 )."
+      "query": "SELECT DISTINCT ?track FROM <http://musicbrainz.org> FROM <http://musicbrainz.org> WHERE { ?track rdf:type mo:Track . ?artist foaf:made ?track . ?artist foaf:name 'Miles Davis' . ?track mo:duration ?duration . FILTER( ?duration > 1200000 ). }"
     },
     {
       "question": "Which groups was David Bowie a member of?",
       "keywords": "David Bowie, member, group",
-      "query": "SELECT DISTINCT ?band FROM <http://musicbrainz.org> WHERE { ?artist foaf:name 'David Bowie' . ?artist mo:member_of ?band ."
+      "query": "SELECT DISTINCT ?band FROM <http://musicbrainz.org> WHERE { ?artist foaf:name 'David Bowie' . ?artist mo:member_of ?band . }"
     },
     {
       "question": "Give me all albums from Michael Jackson",
       "keywords": "Michael Jackson, album",
-      "query": "SELECT DISTINCT ?album FROM <http://musicbrainz.org> WHERE { ?artist foaf:made ?album . ?artist foaf:name 'Michael Jackson' . ?album dbp:thisAlbum ?album_title ."
+      "query": "SELECT DISTINCT ?album FROM <http://musicbrainz.org> WHERE { ?artist foaf:made ?album . ?artist foaf:name 'Michael Jackson' . ?album dbp:thisAlbum ?album_title . }"
     },
     {
       "question": "Which artists were born on May 30th?",
       "keywords": "birthday, artist, May 30th",
-      "query": "SELECT DISTINCT ?artist FROM <http://musicbrainz.org> WHERE { ?artist a mo:MusicArtist . ?artist dbo:birthDate ?date . filter(regex(?date, \"5-30$\", \"i\")) ."
+      "query": "SELECT DISTINCT ?artist FROM <http://musicbrainz.org> WHERE { ?artist a mo:MusicArtist . ?artist dbo:birthDate ?date . filter(regex(?date, \"5-30$\", \"i\")) . }"
     },
     {
       "question": "Give me all Kraftwerk albums!",
       "keywords": "Kraftwerk, album",
-      "query": "SELECT DISTINCT ?album FROM <http://musicbrainz.org> WHERE { ?artist foaf:made ?album . ?artist foaf:name 'Kraftwerk' . ?album dbp:thisAlbum ?album_title"
+      "query": "SELECT DISTINCT ?album FROM <http://musicbrainz.org> WHERE { ?artist foaf:made ?album . ?artist foaf:name 'Kraftwerk' . ?album dbp:thisAlbum ?album_title . }"
     },
     {
       "question": "Which artists were born on the 30th of September 1964?",
       "keywords": "artist, born, 1964-09-30",
-      "query": "SELECT ?artist FROM <http://musicbrainz.org> WHERE { ?artist a mo:MusicArtist . ?artist dbo:birthDate ?date . filter(?date = \"1964-09-30\") ."
+      "query": "SELECT ?artist FROM <http://musicbrainz.org> WHERE { ?artist a mo:MusicArtist . ?artist dbo:birthDate ?date . filter(?date = \"1964-09-30\") . }"
     },
     {
       "question": "Give me all bands which broke up in 2010",
       "keywords": "band, broke up, 2010",
-      "query": "SELECT distinct ?band FROM <http://musicbrainz.org> WHERE { ?band a mo:MusicGroup . ?band dbo:activeYearsEndYear ?end_year . ?band dbo:activeYearsStartYear ?start_year . filter(?start_year != ?end_year) . filter(?end_year = \"2010\") ."
-    },
-    {
-      "question": "Give me all movies by Denzel Washington",
-      "keywords": "Denzel Washington, movie",
-      "query": "select distinct ?movie from <http://www.imdb.quira> where { ?movie a quira:Movie . ?movie quira:actor ?actor . ?actor quira:name \"Denzel Washington\" . }"
+      "query": "SELECT distinct ?band FROM <http://musicbrainz.org> WHERE { ?band a mo:MusicGroup . ?band dbo:activeYearsEndYear ?end_year . ?band dbo:activeYearsStartYear ?start_year . filter(?start_year != ?end_year) . filter(?end_year = \"2010\") . }"
     }
   ]
 }
