@@ -8,7 +8,7 @@ from src.enrichment.new_question import NewQuestion
 
 # TODO: implement like Rake-Rails
 class Main:
-    def __init__(self, dataset='musicbrainz.ini'):
+    def __init__(self, dataset='brainz.json'):
         self.dataset = dataset
 
     def run(self):
@@ -34,5 +34,5 @@ class Main:
 
 
 if __name__ == '__main__':
-    config = input("Informe a branch desejada (imdb.json):\t") or 'imdb.json'
+    config = input("Informe a branch desejada (brainz.json):\t") or 'brainz.json'
     Main(config).run()
