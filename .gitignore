@@ -170,8 +170,8 @@ challenges/**/
 challenges/filter_questions.py
 
 # Output
-src/graph_analysis/results/*
-!src/graph_analysis/results/.keep
+src/graph_analysis/**/
+!src/graph_analysis/graph_statistics.py
 
 # MacOS
 .DS_Store

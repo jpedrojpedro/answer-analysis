@@ -1,11 +1,11 @@
 import pandas as pd
-from src.enrichment.ranking import Ranking
 
 
 class Frequency:
-    def __init__(self, df_tabulated, df_predicate_stats, threshold=0.4):
+    def __init__(self, df_tabulated, df_predicate_stats, uri_inforank, threshold=0.4):
         self.dft = df_tabulated
         self.dfs = df_predicate_stats
+        self.uri_inforank = uri_inforank
         self.threshold = threshold
 
     def apply(self):
@@ -24,7 +24,7 @@ class Frequency:
 
     def _calculate_local_frequency(self):
         df_local_pred = self.dft.groupby('predicate')['object'].count()
-        df_local_pred = df_local_pred.drop(Ranking.URI_INFORANK)
+        df_local_pred = df_local_pred.drop(self.uri_inforank)
         return df_local_pred
 
     def _merge_predicate_frequencies(self, df_local):

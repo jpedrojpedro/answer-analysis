@@ -17,20 +17,22 @@ class Question:
 
 class Dataset:
     def __init__(self, name, folder='./src/endpoints/config'):
-        self.name = name
+        self.full_name = name
+        self.name, self.extension = self.full_name.split('.')
         self.folder = folder
         self.endpoint = None
+        self.uri_inforank = None
         self.statistics = None
         self.questions = None
 
     def parse(self):
         folder = Path(self.folder)
-        file = folder / self.name
+        file = folder / self.full_name
         if not file.exists():
             raise FileNotFoundError('Unknown File: ' + str(file))
-        name, ext = self.name.split('.')
-        getattr(self, 'parse_' + ext)(file)
+        getattr(self, 'parse_' + self.extension)(file)
 
+    # TODO: missing parse uri_inforank
     def parse_ini(self, file):
         config = ConfigParser()
         config.read(file)
@@ -49,6 +51,7 @@ class Dataset:
     def parse_json(self, file):
         config = json.loads(file.read_bytes())
         self.endpoint = config['endpoint']
+        self.uri_inforank = config['uri_inforank']
         self.statistics = config['statistics']
         questions = config['questions']
         prefixes = config['prefixes']

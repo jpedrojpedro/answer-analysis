@@ -15,21 +15,19 @@ class Main:
         dataset = Dataset(self.dataset)
         dataset.parse()
         endpoint = dataset.endpoint
-        gs = GraphStatistics(endpoint, dataset)
-        # TODO: change the persistence logic of statistics
-        # when runs IMBd it overwrites the Brainz data and vice-versa
-        gs.run(load=True)
+        gs = GraphStatistics(endpoint, dataset, dest_folder='./src/graph_analysis/' + dataset.name)
+        gs.run(load=False)
         for idx, question in enumerate(dataset.questions, start=1):
             print("----------{}----------".format(idx))
             print("Question: {}".format(question.question))
             tabulate = Tabulate(endpoint, question)
             dft = tabulate.apply()
-            frequency = Frequency(dft, gs.predicates)
+            frequency = Frequency(dft, gs.predicates, dataset.uri_inforank)
             dff = frequency.apply()
             new_question = NewQuestion(dft, dff)
             new_question.generate()
             # TODO: step ranking only called when no new question can be formulated
-            ranking = Ranking(dft)
+            ranking = Ranking(dft, dataset.uri_inforank)
             dfr = ranking.apply()
 
 

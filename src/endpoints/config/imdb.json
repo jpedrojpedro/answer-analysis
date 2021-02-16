@@ -1,5 +1,6 @@
 {
   "endpoint": "http://localhost:8890/sparql/",
+  "uri_inforank": "http://www.imdb.quira/inforank",
   "statistics": {
     "resources": "select ?resource (count(*) as ?frequency) from <http://www.imdb.quira> where { [] a ?resource } group by ?resource order by desc(?frequency)",
     "predicates": "select ?predicate (count(*) as ?frequency) from <http://www.imdb.quira> where { [] ?predicate ?obj . filter(isLiteral(?obj)) . } group by ?predicate order by desc(?frequency)"
