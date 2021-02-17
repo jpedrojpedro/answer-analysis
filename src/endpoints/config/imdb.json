@@ -6,7 +6,8 @@
     "predicates": "select ?predicate (count(*) as ?frequency) where { [] ?predicate ?obj . filter(isLiteral(?obj)) . } group by ?predicate order by desc(?frequency)"
   },
   "prefixes": {
-    "quira": "http://www.imdb.quira/",
+    "imdb": "http://www.imdb.com/",
+    "quira": "http://www.quira.org/",
     "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
     "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
     "owl": "http://www.w3.org/2002/07/owl#"
@@ -15,12 +16,12 @@
     {
       "question": "Give me all movies by Denzel Washington",
       "keywords": "Denzel Washington, movie",
-      "query": "select distinct ?movie where { ?movie a quira:Movie . ?movie quira:actor ?actor . ?actor quira:name \"Denzel Washington\" . }"
+      "query": "select distinct ?movie where { ?movie a imdb:Movie . ?movie imdb:actor ?actor . ?actor imdb:name \"Denzel Washington\" . }"
     },
     {
       "question": "Give me all spanish language work",
       "keywords": "language, spanish, work",
-      "query": "select distinct ?work where { ?work a quira:Work . ?work quira:language ?lang . ?lang rdfs:label \"Spanish\" . }"
+      "query": "select distinct ?work where { ?work a imdb:Work . ?work imdb:language ?lang . ?lang rdfs:label \"Spanish\" . }"
     }
   ]
 }
