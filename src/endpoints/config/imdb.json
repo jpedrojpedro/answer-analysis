@@ -1,9 +1,9 @@
 {
-  "endpoint": "http://localhost:8890/sparql/",
-  "uri_inforank": "http://www.imdb.quira/inforank",
+  "endpoint": "http://semanticweb.inf.puc-rio.br:3030/IMDb/sparql",
+  "uri_inforank": "http://www.quira.org/inforank",
   "statistics": {
-    "resources": "select ?resource (count(*) as ?frequency) from <http://www.imdb.quira> where { [] a ?resource } group by ?resource order by desc(?frequency)",
-    "predicates": "select ?predicate (count(*) as ?frequency) from <http://www.imdb.quira> where { [] ?predicate ?obj . filter(isLiteral(?obj)) . } group by ?predicate order by desc(?frequency)"
+    "resources": "select ?resource (count(*) as ?frequency) where { [] a ?resource } group by ?resource order by desc(?frequency)",
+    "predicates": "select ?predicate (count(*) as ?frequency) where { [] ?predicate ?obj . filter(isLiteral(?obj)) . } group by ?predicate order by desc(?frequency)"
   },
   "prefixes": {
     "quira": "http://www.imdb.quira/",
@@ -15,12 +15,12 @@
     {
       "question": "Give me all movies by Denzel Washington",
       "keywords": "Denzel Washington, movie",
-      "query": "select distinct ?movie from <http://www.imdb.quira> where { ?movie a quira:Movie . ?movie quira:actor ?actor . ?actor quira:name \"Denzel Washington\" . }"
+      "query": "select distinct ?movie where { ?movie a quira:Movie . ?movie quira:actor ?actor . ?actor quira:name \"Denzel Washington\" . }"
     },
     {
       "question": "Give me all spanish language work",
       "keywords": "language, spanish, work",
-      "query": "select distinct ?work from <http://www.imdb.quira> where { ?work a quira:Work . ?work quira:language ?lang . ?lang rdfs:label \"Spanish\" . }"
+      "query": "select distinct ?work where { ?work a quira:Work . ?work quira:language ?lang . ?lang rdfs:label \"Spanish\" . }"
     }
   ]
 }

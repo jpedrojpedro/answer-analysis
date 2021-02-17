@@ -6,6 +6,7 @@ services:
       dockerfile: Dockerfile
     volumes:
       - ../../datasets/quira-brainz:/usr/share/proj/quira
+      - ./virtuoso.ini:/opt/virtuoso-opensource/database/virtuoso.ini
     ports:
       - 1111:1111
       - 8890:8890
