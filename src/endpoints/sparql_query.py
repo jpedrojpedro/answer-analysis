@@ -11,7 +11,7 @@ class SparqlQuery:
     def execute(self):
         sparql = SPARQLWrapper(self.endpoint)
         sparql.setQuery(self.query)
-        sparql.setTimeout(600)  # 10 minutes
+        sparql.setTimeout(1800)  # 30 minutes
         sparql.setOnlyConneg(True)
         sparql.addCustomHttpHeader("Content-type", "application/sparql-query")
         sparql.addCustomHttpHeader("Accept", "text/csv")
