@@ -1,9 +1,9 @@
 from src.endpoints.dataset import Dataset
 from src.graph_analysis.graph_statistics import GraphStatistics
-from src.enrichment.tabulate import Tabulate
-from src.enrichment.ranking import Ranking
-from src.enrichment.frequency import Frequency
-from src.enrichment.new_query import NewQuery
+from src.flow.tabulate import Tabulate
+from src.flow.ranking import Ranking
+from src.flow.frequency import Frequency
+from src.flow.new_query import NewQuery
 
 
 # TODO: implement like Rake-Rails
