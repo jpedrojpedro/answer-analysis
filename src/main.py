@@ -41,5 +41,5 @@ class Main:
 
 
 if __name__ == '__main__':
-    config = input("Informe a branch desejada (brainz.json):\t") or 'brainz.json'
+    config = input("Informe o dataset desejado (brainz.json):\t") or 'brainz.json'
     Main(config).run()
