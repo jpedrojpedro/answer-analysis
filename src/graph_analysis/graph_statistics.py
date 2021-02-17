@@ -5,13 +5,12 @@ from src.helper import persist_results
 
 
 class GraphStatistics:
-    STEPS = ['resources', 'predicates']
-
-    def __init__(self, endpoint, dataset, dest_folder='./src/graph_analysis/results'):
+    def __init__(self, endpoint, dataset, dest_folder='./src/graph_analysis/results', *steps):
         self.endpoint = endpoint
         self.dataset = dataset
         self.dest_folder = dest_folder
-        for step in self.STEPS:
+        self.steps = steps
+        for step in self.steps:
             setattr(self, step, None)
 
     def run(self, load=False):
@@ -19,11 +18,11 @@ class GraphStatistics:
             self._load()
             return
         self._clear_analysis()
-        for step in self.STEPS:
+        for step in self.steps:
             self._run_step(step)
 
     def _load(self):
-        for step in self.STEPS:
+        for step in self.steps:
             folder = Path(self.dest_folder)
             filename = folder / (step + '.jsonl')
             if not filename.exists():
@@ -43,7 +42,7 @@ class GraphStatistics:
 
     def _clear_analysis(self):
         folder = Path(self.dest_folder)
-        for step in self.STEPS:
+        for step in self.steps:
             filename = folder / (step + '.jsonl')
             if not filename.exists():
                 continue

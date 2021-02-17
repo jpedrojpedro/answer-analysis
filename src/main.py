@@ -14,14 +14,15 @@ class Main:
     def run(self):
         self.dataset.parse()
         endpoint = self.dataset.endpoint
-        gs = GraphStatistics(endpoint, self.dataset, dest_folder='./src/graph_analysis/' + self.dataset.name)
+        dest_folder = './src/graph_analysis/' + self.dataset.name
+        gs = GraphStatistics(endpoint, self.dataset, dest_folder, 'resources', 'predicates')
         gs.run(load=True)
         question = self.selection_prompt()
         print("Question: {}".format(question.question))
         tabulate = Tabulate(endpoint, question)
         dft = tabulate.apply()
         print(tabulate.enriched_query)
-        frequency = Frequency(dft, gs.predicates, self.dataset.uri_inforank)
+        frequency = Frequency(dft, getattr(gs, 'predicates'), self.dataset.uri_inforank)
         dff = frequency.apply()
         new_query = NewQuery(dft, dff, tabulate.enriched_query, threshold=10)
         new_query.generate()
