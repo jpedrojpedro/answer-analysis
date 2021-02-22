@@ -4,6 +4,7 @@ from src.flow.tabulate import Tabulate
 from src.flow.ranking import Ranking
 from src.flow.frequency import Frequency
 from src.flow.new_query import NewQuery
+from src.flow.query_parser import QueryParser
 
 
 # TODO: implement like Rake-Rails
@@ -19,7 +20,9 @@ class Main:
         gs.run(load=True)
         question = self.selection_prompt()
         print("Question: {}".format(question.question))
-        tabulate = Tabulate(endpoint, question)
+        qp = QueryParser(question.full_sparql_query())
+        qp.parse()
+        tabulate = Tabulate(endpoint, qp)
         dft = tabulate.apply()
         print(tabulate.enriched_query)
         frequency = Frequency(dft, getattr(gs, 'predicates'), self.dataset.uri_inforank)

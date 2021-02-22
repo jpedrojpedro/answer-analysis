@@ -12,7 +12,10 @@ class Question:
         self.prefixes = ["PREFIX {}: <{}>".format(prefix, uri) for prefix, uri in prefixes.items()]
 
     def display_prefixes(self):
-        return '\n'.join(self.prefixes)
+        return ' '.join(self.prefixes)
+
+    def full_sparql_query(self):
+        return self.display_prefixes() + ' ' + self.query
 
 
 class Dataset:
