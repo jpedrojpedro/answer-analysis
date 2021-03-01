@@ -16,6 +16,7 @@ class Tabulate:
     def __init__(self, endpoint, query_parser):
         self.endpoint = endpoint
         self.query_parser = query_parser
+        self.final_query = None
 
     def apply(self):
         q_template = Template(self.QUERY_TEMPLATE)
@@ -32,14 +33,14 @@ class Tabulate:
             dataset=self._build_dataset(),
             graph_pattern=self._build_tabulated_query_pattern(single_var)
         )
-        final_query = q_template.substitute(
+        self.final_query = q_template.substitute(
             prefixes=self._build_prefixes(),
             selection=_build_selection(three_vars, distinct=True),
             dataset=self._build_dataset(),
             original=s1,
             tabulated=s2
         )
-        sq = SparqlQuery(self.endpoint, final_query)
+        sq = SparqlQuery(self.endpoint, self.final_query)
         df = sq.execute()
         return df
 
@@ -52,8 +53,9 @@ class Tabulate:
         return variables
 
     def _build_dataset(self):
-        if self.query_parser.dataset:
-            return "from <{}>".format(self.query_parser.dataset)
+        if not self.query_parser.dataset:
+            return ''
+        return "from <{}>".format(self.query_parser.dataset)
 
     def _build_query_patterns(self):
         return ' . '.join(self.query_parser.query_patterns)

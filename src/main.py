@@ -24,10 +24,10 @@ class Main:
         qp.parse()
         tabulate = Tabulate(endpoint, qp)
         dft = tabulate.apply()
-        print(tabulate.enriched_query)
+        print(tabulate.final_query)
         frequency = Frequency(dft, getattr(gs, 'predicates'), self.dataset.uri_inforank)
         dff = frequency.apply()
-        new_query = NewQuery(dft, dff, tabulate.enriched_query, threshold=10)
+        new_query = NewQuery(dft, dff, tabulate.final_query, threshold=10)
         new_query.generate()
         # TODO: step ranking only called when no new question can be formulated
         ranking = Ranking(dft, self.dataset.uri_inforank)
