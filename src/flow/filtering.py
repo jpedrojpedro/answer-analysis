@@ -10,7 +10,7 @@ class Filtering:
     def apply(self, sort='desc'):
         self._filter_candidates()
         if len(self.candidates) == 0:
-            return self.dft
+            return self.dft, None
         predicate = self._select_candidate(reverse=True if sort == 'desc' else False)
         df_result = self._filter_results(predicate)
         return df_result, predicate
