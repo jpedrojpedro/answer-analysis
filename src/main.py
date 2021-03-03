@@ -8,6 +8,13 @@ from src.flow.query_parser import QueryParser
 from src import helper
 
 
+def should_continue(candidates):
+    print("available predicates: {}".format(candidates))
+    answer = input("Deseja continuar filtrando o resultado? (n):\t") or 'n'
+    print("---------------------")
+    return False if answer == 'n' else True
+
+
 # TODO: implement like Rake-Rails
 class Main:
     def __init__(self, dataset='brainz.json'):
@@ -32,12 +39,15 @@ class Main:
             old_dft = dft.copy()
             frequency = Frequency(dft, getattr(gs, 'predicates'), self.dataset.uri_inforank)
             dff = frequency.apply()
-            filtering = Filtering(dft, dff, variable, 10, *self.filtered_predicates)
-            dft, predicate = filtering.apply(sort='desc')
+            filtering = Filtering(dft, dff, variable, 10, 'desc', *self.filtered_predicates)
+            dft, predicate = filtering.apply()
+            candidates = filtering.all_candidates()
             self.filtered_predicates.append(predicate)
             keys = [col for col in dft.columns if col not in ['predicate', 'object']]
             if helper.check_equality(old_dft, dft, keys=keys):
-                break
+                if predicate is None or not should_continue(candidates):
+                    break
+                continue
         ranking = Ranking(dft, self.dataset.uri_inforank)
         dfr = ranking.apply()
         print(dfr)

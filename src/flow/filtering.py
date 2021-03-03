@@ -1,19 +1,24 @@
 class Filtering:
-    def __init__(self, df_tabulated, df_frequencies, variable, threshold, *ignore_predicates):
+    def __init__(self, df_tabulated, df_frequencies, variable, threshold, sort, *ignore_predicates):
         self.dft = df_tabulated
         self.dff = df_frequencies
         self.variable = variable
         self.threshold = threshold
+        self.reverse = True if sort == 'desc' else False
         self.ignore_predicates = ignore_predicates
         self.candidates = []
 
-    def apply(self, sort='desc'):
+    def apply(self):
         self._filter_candidates()
         if len(self.candidates) == 0:
             return self.dft, None
-        predicate = self._select_candidate(reverse=True if sort == 'desc' else False)
+        predicate = self._select_candidate()
         df_result = self._filter_results(predicate)
         return df_result, predicate
+
+    def all_candidates(self):
+        candidates = sorted(self.candidates, key=lambda e: e['num_grouping_values'], reverse=self.reverse)
+        return candidates
 
     def _filter_candidates(self):
         for _idx, row in self.dff.iterrows():
@@ -28,8 +33,8 @@ class Filtering:
                 self.candidates.append({'predicate': row['predicate'], 'num_grouping_values': num_grouping_values})
                 # print(df_result)
 
-    def _select_candidate(self, reverse):
-        candidates = sorted(self.candidates, key=lambda e: e['num_grouping_values'], reverse=reverse)
+    def _select_candidate(self):
+        candidates = self.all_candidates()
         candidate = candidates[0]
         print("selected predicate: {} :: {} distinct values"
               .format(candidate['predicate'], candidate['num_grouping_values']))
