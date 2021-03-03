@@ -33,7 +33,7 @@ class Main:
             frequency = Frequency(dft, getattr(gs, 'predicates'), self.dataset.uri_inforank)
             dff = frequency.apply()
             filtering = Filtering(dft, dff, variable, 10, *self.filtered_predicates)
-            dft, predicate = filtering.apply()
+            dft, predicate = filtering.apply(sort='desc')
             self.filtered_predicates.append(predicate)
             keys = [col for col in dft.columns if col not in ['predicate', 'object']]
             if helper.check_equality(old_dft, dft, keys=keys):

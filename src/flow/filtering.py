@@ -7,11 +7,11 @@ class Filtering:
         self.ignore_predicates = ignore_predicates
         self.candidates = []
 
-    def apply(self):
+    def apply(self, sort='desc'):
         self._filter_candidates()
         if len(self.candidates) == 0:
             return self.dft
-        predicate = self._select_candidate()
+        predicate = self._select_candidate(reverse=True if sort == 'desc' else False)
         df_result = self._filter_results(predicate)
         return df_result, predicate
 
@@ -28,7 +28,7 @@ class Filtering:
                 self.candidates.append({'predicate': row['predicate'], 'num_grouping_values': num_grouping_values})
                 # print(df_result)
 
-    def _select_candidate(self, reverse=True):
+    def _select_candidate(self, reverse):
         candidates = sorted(self.candidates, key=lambda e: e['num_grouping_values'], reverse=reverse)
         candidate = candidates[0]
         print("selected predicate: {} :: {} distinct values"
