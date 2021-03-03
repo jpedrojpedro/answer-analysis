@@ -30,13 +30,15 @@ class Filtering:
 
     def _select_candidate(self, reverse=True):
         candidates = sorted(self.candidates, key=lambda e: e['num_grouping_values'], reverse=reverse)
+        candidate = candidates[0]
+        print("selected predicate: {} :: {} distinct values"
+              .format(candidate['predicate'], candidate['num_grouping_values']))
         candidates = [c['predicate'] for c in candidates]
         return candidates[0]
 
     def _filter_results(self, predicate):
         df_filtered = self.dft.where(self.dft['predicate'] == predicate).dropna()
         df_result = self.dft[self.dft[self.variable].isin(df_filtered[self.variable].unique())]
-        print("selected predicate: {}".format(predicate))
         print("tabulated: {}".format(self.dft.shape))
         print("filtered: {}".format(df_filtered.shape))
         print("result: {}".format(df_result.shape))
