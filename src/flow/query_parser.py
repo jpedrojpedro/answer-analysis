@@ -1,5 +1,4 @@
 import re
-# from rdflib.plugins.sparql.parser import Query
 
 
 class QueryParser:
@@ -7,8 +6,6 @@ class QueryParser:
     REGEXP_VARIABLES = r"(?:select\s+distinct\s+|select\s+)((?:\?[a-zA-Z_]+\s+)+)"
     REGEXP_DATASET = r"from\s*<([a-zA-Z0-9:\/.#_-]+)>"
     REGEXP_QUERY_PATTERN = r"{((.|\n)[^{}]*)}"
-    # ANATOMY = "prefix, select, from (optional), where, group by, having, order by, limit, offset, bindings"
-    # GRAPH_PATTERNS = "conjunction (.), optional (left join), union, minus, subquery"
 
     def __init__(self, sparql_query):
         self.sparql_query = sparql_query

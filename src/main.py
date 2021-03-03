@@ -3,7 +3,7 @@ from src.graph_analysis.graph_statistics import GraphStatistics
 from src.flow.tabulate import Tabulate
 from src.flow.ranking import Ranking
 from src.flow.frequency import Frequency
-from src.flow.new_query import NewQuery
+from src.flow.filtering import Filtering
 from src.flow.query_parser import QueryParser
 
 
@@ -11,6 +11,7 @@ from src.flow.query_parser import QueryParser
 class Main:
     def __init__(self, dataset='brainz.json'):
         self.dataset = Dataset(dataset)
+        self.filtered_predicates = []
 
     def run(self):
         self.dataset.parse()
@@ -24,12 +25,14 @@ class Main:
         qp.parse()
         tabulate = Tabulate(endpoint, qp)
         dft = tabulate.apply()
-        print(tabulate.final_query)
-        frequency = Frequency(dft, getattr(gs, 'predicates'), self.dataset.uri_inforank)
-        dff = frequency.apply()
-        new_query = NewQuery(dft, dff, tabulate.final_query, threshold=10)
-        new_query.generate()
-        # TODO: step ranking only called when no new question can be formulated
+        while True:
+            old_dft = dft.copy()
+            frequency = Frequency(dft, getattr(gs, 'predicates'), self.dataset.uri_inforank)
+            dff = frequency.apply()
+            filtering = Filtering(dft, dff, threshold=15, *self.filtered_predicates)
+            dft = filtering.apply()
+            if old_dft.equals(dft):
+                break
         ranking = Ranking(dft, self.dataset.uri_inforank)
         dfr = ranking.apply()
         print(dfr)
