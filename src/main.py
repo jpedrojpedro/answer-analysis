@@ -9,7 +9,10 @@ from src import helper
 
 
 def should_continue(candidates):
-    print("available predicates: {}".format(candidates))
+    print("Predicados disponiveis:")
+    for candidate in candidates:
+        predicate, dist_val = candidate.values()
+        print("- {} :: {} distinct values".format(predicate, dist_val))
     answer = input("Deseja continuar filtrando o resultado? (n):\t") or 'n'
     print("---------------------")
     return False if answer == 'n' else True
