@@ -5,6 +5,7 @@ from src.flow.ranking import Ranking
 from src.flow.frequency import Frequency
 from src.flow.filtering import Filtering
 from src.flow.query_parser import QueryParser
+from src import helper
 
 
 # TODO: implement like Rake-Rails
@@ -25,13 +26,17 @@ class Main:
         qp.parse()
         tabulate = Tabulate(endpoint, qp)
         dft = tabulate.apply()
+        variable = qp.variables[0][1:]  # removing char '?'
+        print("Variable: {}".format(variable))
         while True:
             old_dft = dft.copy()
             frequency = Frequency(dft, getattr(gs, 'predicates'), self.dataset.uri_inforank)
             dff = frequency.apply()
-            filtering = Filtering(dft, dff, threshold=15, *self.filtered_predicates)
-            dft = filtering.apply()
-            if old_dft.equals(dft):
+            filtering = Filtering(dft, dff, variable, 10, *self.filtered_predicates)
+            dft, predicate = filtering.apply()
+            self.filtered_predicates.append(predicate)
+            keys = [col for col in dft.columns if col not in ['predicate', 'object']]
+            if helper.check_equality(old_dft, dft, keys=keys):
                 break
         ranking = Ranking(dft, self.dataset.uri_inforank)
         dfr = ranking.apply()

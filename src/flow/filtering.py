@@ -1,10 +1,8 @@
-import pandas as pd
-
-
 class Filtering:
-    def __init__(self, df_tabulated, df_frequencies, threshold, *ignore_predicates):
+    def __init__(self, df_tabulated, df_frequencies, variable, threshold, *ignore_predicates):
         self.dft = df_tabulated
         self.dff = df_frequencies
+        self.variable = variable
         self.threshold = threshold
         self.ignore_predicates = ignore_predicates
         self.candidates = []
@@ -15,7 +13,7 @@ class Filtering:
             return self.dft
         predicate = self._select_candidate()
         df_result = self._filter_results(predicate)
-        return df_result
+        return df_result, predicate
 
     def _filter_candidates(self):
         for _idx, row in self.dff.iterrows():
@@ -33,12 +31,14 @@ class Filtering:
     def _select_candidate(self, reverse=True):
         candidates = sorted(self.candidates, key=lambda e: e['num_grouping_values'], reverse=reverse)
         candidates = [c['predicate'] for c in candidates]
-        print("Candidate: {}".format(candidates[0]))
         return candidates[0]
 
-    def _filter_results(self, predicate, suffix="_drop_col"):
+    def _filter_results(self, predicate):
         df_filtered = self.dft.where(self.dft['predicate'] == predicate).dropna()
-        df_result = pd.merge(self.dft, df_filtered, on='movie', how='inner', suffixes=("", suffix))
-        drop_cols = [col for col in df_result.columns if suffix in col]
-        df_result = df_result.drop(columns=drop_cols)
+        df_result = self.dft[self.dft[self.variable].isin(df_filtered[self.variable].unique())]
+        print("selected predicate: {}".format(predicate))
+        print("tabulated: {}".format(self.dft.shape))
+        print("filtered: {}".format(df_filtered.shape))
+        print("result: {}".format(df_result.shape))
+        print("---------------------")
         return df_result
