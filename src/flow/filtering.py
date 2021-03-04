@@ -1,3 +1,6 @@
+from src import helper
+
+
 class Filtering:
     def __init__(self, df_tabulated, df_frequencies, variable, threshold, sort, *ignore_predicates):
         self.dft = df_tabulated
@@ -27,11 +30,11 @@ class Filtering:
             df_filtered = self.dft.where(self.dft['predicate'] == row['predicate']).dropna()
             df_result = df_filtered.groupby('object')['predicate'].count()
             num_grouping_values = len(df_result.index)
-            # print("Predicate: {}".format(row['predicate']))
-            # print("# of grouping values: {}".format(num_grouping_values))
+            print("Predicate: {}".format(row['predicate']))
+            print("# of grouping values: {}".format(num_grouping_values))
             if num_grouping_values <= self.threshold:
                 self.candidates.append({'predicate': row['predicate'], 'num_grouping_values': num_grouping_values})
-                # print(df_result)
+                print(df_result)
 
     def _select_candidate(self):
         candidates = self.all_candidates()
@@ -45,7 +48,10 @@ class Filtering:
         df_filtered = self.dft.where(self.dft['predicate'] == predicate).dropna()
         df_result = self.dft[self.dft[self.variable].isin(df_filtered[self.variable].unique())]
         print("tabulated: {}".format(self.dft.shape))
+        helper.pretty_print_df(self.dft)
         print("filtered: {}".format(df_filtered.shape))
+        helper.pretty_print_df(df_filtered)
         print("result: {}".format(df_result.shape))
+        helper.pretty_print_df(df_result)
         print("---------------------")
         return df_result

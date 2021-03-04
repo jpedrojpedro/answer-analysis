@@ -15,3 +15,11 @@ def check_equality(df1, df2, keys):
     df1 = df1.sort_values(by=keys).reset_index(drop=True)
     df2 = df2.sort_values(by=keys).reset_index(drop=True)
     return pd.DataFrame.equals(df1, df2)
+
+
+def pretty_print_df(df, limit=40):
+    cols = df.columns
+    template = ' | '.join([f"{{{col}:50}}" for col in cols])
+    print(template.format(**{col: col for col in cols}))
+    for _idx, row in df.head(limit).iterrows():
+        print(template.format(**{col: row[col] for col in cols}))

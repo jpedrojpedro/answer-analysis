@@ -31,7 +31,6 @@ class Main:
         gs = GraphStatistics(endpoint, self.dataset, dest_folder, 'resources', 'predicates')
         gs.run(load=True)
         question = self.selection_prompt()
-        print("Question: {}".format(question.question))
         qp = QueryParser(question.full_sparql_query())
         qp.parse()
         tabulate = Tabulate(endpoint, qp)
@@ -53,7 +52,7 @@ class Main:
                 continue
         ranking = Ranking(dft, self.dataset.uri_inforank)
         dfr = ranking.apply()
-        print(dfr)
+        helper.pretty_print_df(dfr)
 
     def selection_prompt(self):
         print("---------------------")
@@ -62,7 +61,9 @@ class Main:
             print("{} - {}".format(idx, question.question))
         print("---------------------")
         id_selected = input("Selecione uma das peguntas acima (7):\t") or '7'
-        return options[int(id_selected)]
+        question = options[int(id_selected)]
+        print("Question: {}".format(question.question))
+        return question
 
 
 if __name__ == '__main__':
