@@ -2,11 +2,11 @@ import pandas as pd
 
 
 class Frequency:
-    def __init__(self, df_tabulated, df_predicate_stats, uri_inforank, threshold=0.4):
+    def __init__(self, df_tabulated, df_predicate_stats, uri_inforank, min_max_threshold=(0.4, 2)):
         self.dft = df_tabulated
         self.dfs = df_predicate_stats
         self.uri_inforank = uri_inforank
-        self.threshold = threshold
+        self.min_max_threshold = min_max_threshold
 
     def apply(self):
         self._guarantee_column_names('dft', 'subject', 'predicate', 'object')
@@ -37,4 +37,5 @@ class Frequency:
         df['%_total'] = df.local_frequency / len(self.dft.subject.unique())
 
     def _filter_by_threshold(self, df):
-        return df.where(df['%_total'] >= self.threshold).dropna()
+        min_threshold, max_threshold = self.min_max_threshold
+        return df.where((max_threshold >= df['%_total']) & (df['%_total'] >= min_threshold)).dropna()
