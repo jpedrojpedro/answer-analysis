@@ -175,3 +175,6 @@ src/graph_analysis/**/
 
 # MacOS
 .DS_Store
+
+# output
+src/output-*.txt
