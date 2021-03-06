@@ -62,7 +62,7 @@ class Main:
                 continue
         ranking = Ranking(dft, self.dataset.uri_inforank)
         dfr = ranking.apply(sort='desc')
-        df = pd.merge(dfr, dfo, on=variable, how='inner')
+        df = pd.merge(dfr, dfo, on=variable, how='left')
         helper.pretty_print_df(df)
 
     def selection_prompt(self):

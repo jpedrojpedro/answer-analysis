@@ -26,7 +26,7 @@
     {
       "question": "Which actors or actresses were born on May 30th?",
       "keywords": "birthday, actor, actress, May 30th",
-      "query": "select distinct ?artist where { { ?artist a imdb:Actor . ?artist imdb:birth_date ?date . filter(regex(?date, \"^30 May\", \"i\")) . } union { ?artist a imdb:Actress . ?artist imdb:birth_date ?date . filter(regex(?date, \"^30 May\", \"i\")) . } }"
+      "query": "select distinct ?artist where { ?artist a ?klass . ?artist imdb:birth_date ?date . filter(regex(?date, \"^30 May\", \"i\")) . filter(?klass in (imdb:Actor, imdb:Actress)) . }"
     }
   ]
 }
