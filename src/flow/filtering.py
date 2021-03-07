@@ -36,24 +36,25 @@ class Filtering:
             df_filtered = self.dft.where(self.dft['predicate'] == row['predicate']).dropna()
             df_result = df_filtered.groupby('object')['predicate'].count()
             amount_uniq_opts = len(df_result.index)
+            print("Predicate: {}".format(row['predicate']))
+            print("# of grouping values: {}".format(amount_uniq_opts))
             if amount_uniq_opts <= self.threshold:
-                print("Predicate: {}".format(row['predicate']))
-                print("# of grouping values: {}".format(amount_uniq_opts))
                 self.candidates.append({
                     'predicate': row['predicate'],
                     'amount_uniq_opts': amount_uniq_opts,
                     'options': [result for result in df_result.iteritems()]
                 })
+                print("selected as candidate: {}".format(row['predicate']))
                 print(df_result)
 
     def _select_candidate_and_option(self):
         candidates = self.all_candidates()
         # selected_candidate =
-        # approach less restrictive faceted-only
+        # approach less restrictive faceted-only | alternative 2
         # sorted(map(less_restrictive_faceted, candidates), key=lambda e: e[0], reverse=True)[0]
-        # approach less restrictive predicate and less restrictive faceted
+        # approach less restrictive predicate and less restrictive faceted | alternative 1
         selected_candidate = sorted(map(less_restrictive_faceted, [candidates[0]]), key=lambda e: e[0], reverse=True)[0]
-        # approach most restrictive predicate and less restrictive faceted - short paper
+        # approach most restrictive predicate and less restrictive faceted | short paper
         # sorted(map(less_restrictive_faceted, [candidates[0]]), key=lambda e: e[0], reverse=True)[0]
         option_amount, predicate, option = selected_candidate
         print("selected => predicate: {} | option: {} | matches: {}".format(predicate, option, option_amount))

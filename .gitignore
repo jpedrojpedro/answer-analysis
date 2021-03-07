@@ -177,4 +177,4 @@ src/graph_analysis/**/
 .DS_Store
 
 # output
-src/output-*.txt
+src/output/

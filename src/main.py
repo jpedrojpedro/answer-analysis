@@ -50,6 +50,7 @@ class Main:
             frequency = Frequency(dft, getattr(gs, 'predicates'), self.dataset.uri_inforank)
             dff = frequency.apply()
             # short paper approach - asc
+            # alternatives 1 and 2 - desc
             filtering = Filtering(dft, dff, variable, 10, 'desc', *self.filtered_predicates)
             dft, predicate = filtering.apply()
             # TODO: fix logic of candidates vs selected
