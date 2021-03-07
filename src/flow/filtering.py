@@ -48,7 +48,13 @@ class Filtering:
 
     def _select_candidate_and_option(self):
         candidates = self.all_candidates()
-        selected_candidate = sorted(map(less_restrictive_faceted, candidates), key=lambda e: e[0], reverse=True)[0]
+        # selected_candidate =
+        # approach less restrictive faceted-only
+        # sorted(map(less_restrictive_faceted, candidates), key=lambda e: e[0], reverse=True)[0]
+        # approach less restrictive predicate and less restrictive faceted
+        selected_candidate = sorted(map(less_restrictive_faceted, [candidates[0]]), key=lambda e: e[0], reverse=True)[0]
+        # approach most restrictive predicate and less restrictive faceted - short paper
+        # sorted(map(less_restrictive_faceted, [candidates[0]]), key=lambda e: e[0], reverse=True)[0]
         option_amount, predicate, option = selected_candidate
         print("selected => predicate: {} | option: {} | matches: {}".format(predicate, option, option_amount))
         return predicate, option
@@ -62,5 +68,5 @@ class Filtering:
         helper.pretty_print_df(df_filtered)
         print("result: {}".format(df_result.shape))
         helper.pretty_print_df(df_result)
-        print("---------------------")
+        print("---------------------------------------------------------------")
         return df_result
