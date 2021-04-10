@@ -7,6 +7,20 @@ def less_restrictive_faceted(elem):
     return opt_amount, pred, opt
 
 
+def inspect_facets(candidates):
+    facets = []
+    for candidate in candidates:
+        pred = candidate['predicate']
+        opts = [(pred,) + opt for opt in candidate['options']]
+        facets += opts
+    facets.sort(key=lambda f: f[2], reverse=True)
+    if not facets:
+        return
+    print("Facets candidates sorted:")
+    for facet in facets:
+        print("{}, {}, {}".format(facet[0], facet[1], facet[2]))
+
+
 class Filtering:
     def __init__(self, df_tabulated, df_frequencies, variable, threshold, sort, *ignore_predicates):
         self.dft = df_tabulated
@@ -49,14 +63,14 @@ class Filtering:
 
     def _select_candidate_and_option(self):
         candidates = self.all_candidates()
-        # selected_candidate =
-        # approach less restrictive faceted-only | alternative 2
-        # sorted(map(less_restrictive_faceted, candidates), key=lambda e: e[0], reverse=True)[0]
-        # approach less restrictive predicate and less restrictive faceted | alternative 1
-        selected_candidate = sorted(map(less_restrictive_faceted, [candidates[0]]), key=lambda e: e[0], reverse=True)[0]
-        # approach most restrictive predicate and less restrictive faceted | short paper
-        # sorted(map(less_restrictive_faceted, [candidates[0]]), key=lambda e: e[0], reverse=True)[0]
-        option_amount, predicate, option = selected_candidate
+        # Omega approach | most embracing facet, regardless the predicate
+        inspect_facets(candidates)
+        selected = sorted(map(less_restrictive_faceted, candidates), key=lambda e: e[0], reverse=True)[0]
+        # Sigma approach (JIDM) | most embracing predicate and most embracing facet
+        # selected = sorted(map(less_restrictive_faceted, [candidates[0]]), key=lambda e: e[0], reverse=True)[0]
+        # Pi approach (short paper) | most restrictive predicate and most embracing faceted
+        # selected = sorted(map(less_restrictive_faceted, [candidates[0]]), key=lambda e: e[0], reverse=True)[0]
+        option_amount, predicate, option = selected
         print("selected => predicate: {} | option: {} | matches: {}".format(predicate, option, option_amount))
         return predicate, option
 
