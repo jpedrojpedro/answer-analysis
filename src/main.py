@@ -61,12 +61,12 @@ class Main:
             self.filtered_predicates.append(predicate)
             keys = [col for col in dft.columns if col not in ['predicate', 'object']]
             # TODO: set threshold instead of using literal 10
-            if len(dft[variable].unique()) <= 10 or helper.check_equality(old_dft, dft, keys=keys):
+            if len(dft[variable].unique()) <= 15 or helper.check_equality(old_dft, dft, keys=keys):
                 if predicate is None or not should_continue(candidates):
                     break
                 continue
         ranking = Ranking(dft, self.dataset.uri_inforank)
-        dfr = ranking.apply(sort='desc')
+        dfr = ranking.apply(sort='desc', top=15)
         df = pd.merge(dfr, dfo, on=variable, how='left')
         helper.pretty_print_df(df)
 
