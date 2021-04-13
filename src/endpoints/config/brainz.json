@@ -2,8 +2,8 @@
   "endpoint": "http://semanticweb.inf.puc-rio.br:3030/MusicBrainz/sparql",
   "uri_inforank": "http://www.brainz.quira/inforank",
   "statistics": {
-    "resources": "select ?resource (count(*) as ?frequency) from <http://musicbrainz.org> where { [] a ?resource } group by ?resource order by desc(?frequency)",
-    "predicates": "select ?predicate (count(*) as ?frequency) from <http://musicbrainz.org> where { [] ?predicate ?obj . filter(isLiteral(?obj)) . } group by ?predicate order by desc(?frequency)"
+    "resources": "select ?resource (count(*) as ?frequency) where { [] a ?resource } group by ?resource order by desc(?frequency)",
+    "predicates": "select ?predicate (count(*) as ?frequency) where { [] ?predicate ?obj . filter(isLiteral(?obj)) . } group by ?predicate order by desc(?frequency)"
   },
   "prefixes": {
     "dc": "http://purl.org/dc/elements/1.1/",

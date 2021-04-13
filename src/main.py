@@ -7,6 +7,7 @@ from src.flow.frequency import Frequency
 from src.flow.filtering import Filtering
 from src.flow.original import Original
 from src.flow.query_parser import QueryParser
+from src.flow import heuristic as heuristic_module
 from src import helper
 
 
@@ -22,7 +23,8 @@ def should_continue(candidates):
 
 # TODO: implement like Rake-Rails
 class Main:
-    def __init__(self, dataset='brainz.json'):
+    def __init__(self, dataset, heuristic):
+        self.heuristic = getattr(heuristic_module, 'Heuristic' + heuristic.capitalize())()
         self.dataset = Dataset(dataset)
         self.filtered_predicates = []
 
@@ -47,26 +49,22 @@ class Main:
         print("Variable: {}".format(variable))
         while True:
             old_dft = dft.copy()
-            frequency = Frequency(dft, getattr(gs, 'predicates'), self.dataset.uri_inforank)
+            frequency = Frequency(dft, getattr(gs, 'predicates'), self.dataset.uri_inforank, self.heuristic.delta)
             dff = frequency.apply()
-            # Pi    approach (SBBD) - asc
-            # filtering = Filtering(dft, dff, variable, 10, 'asc', *self.filtered_predicates)
-            # Sigma approach (JIDM) - desc
-            # filtering = Filtering(dft, dff, variable, 10, 'desc', *self.filtered_predicates)
-            # Omega approach        - desc
-            filtering = Filtering(dft, dff, variable, 10, 'desc', *self.filtered_predicates)
+            filtering = Filtering(
+                dft, dff, variable, self.heuristic, *self.filtered_predicates
+            )
             dft, predicate = filtering.apply()
             # TODO: fix logic of candidates vs selected
             candidates = filtering.all_candidates()
             self.filtered_predicates.append(predicate)
             keys = [col for col in dft.columns if col not in ['predicate', 'object']]
-            # TODO: set threshold instead of using literal 10
-            if len(dft[variable].unique()) <= 15 or helper.check_equality(old_dft, dft, keys=keys):
+            if len(dft[variable].unique()) <= self.heuristic.beta or helper.check_equality(old_dft, dft, keys=keys):
                 if predicate is None or not should_continue(candidates):
                     break
                 continue
         ranking = Ranking(dft, self.dataset.uri_inforank)
-        dfr = ranking.apply(sort='desc', top=15)
+        dfr = ranking.apply(sort='desc', top=self.heuristic.beta)
         df = pd.merge(dfr, dfo, on=variable, how='left')
         helper.pretty_print_df(df)
 
@@ -83,5 +81,6 @@ class Main:
 
 
 if __name__ == '__main__':
-    config = input("Informe o dataset desejado (brainz.json):\t") or 'brainz.json'
-    Main(config).run()
+    d = input("Informe o dataset desejado (brainz.json):\t") or 'brainz.json'
+    h = input("Informe a heuristica desejada (sigma, pi ou omega):\t") or 'sigma'
+    Main(d, h).run()

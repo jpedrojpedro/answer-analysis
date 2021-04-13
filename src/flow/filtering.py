@@ -22,12 +22,13 @@ def inspect_facets(candidates):
 
 
 class Filtering:
-    def __init__(self, df_tabulated, df_frequencies, variable, threshold, sort, *ignore_predicates):
+    def __init__(self, df_tabulated, df_frequencies, variable, heuristic, *ignore_predicates):
         self.dft = df_tabulated
         self.dff = df_frequencies
         self.variable = variable
-        self.threshold = threshold
-        self.reverse = True if sort == 'desc' else False
+        self.threshold = heuristic.alpha
+        self.reverse = True if heuristic.analysis_order == 'desc' else False
+        self.filter_type = heuristic.analysis_type
         self.ignore_predicates = ignore_predicates
         self.candidates = []
 
@@ -63,13 +64,13 @@ class Filtering:
 
     def _select_candidate_and_option(self):
         candidates = self.all_candidates()
-        # Omega approach | most embracing facet, regardless the predicate
-        inspect_facets(candidates)
-        selected = sorted(map(less_restrictive_faceted, candidates), key=lambda e: e[0], reverse=True)[0]
-        # Sigma approach (JIDM) | most embracing predicate and most embracing facet
-        # selected = sorted(map(less_restrictive_faceted, [candidates[0]]), key=lambda e: e[0], reverse=True)[0]
-        # Pi approach (short paper) | most restrictive predicate and most embracing faceted
-        # selected = sorted(map(less_restrictive_faceted, [candidates[0]]), key=lambda e: e[0], reverse=True)[0]
+        if self.filter_type == 'facet':
+            inspect_facets(candidates)
+            selected = sorted(map(less_restrictive_faceted, candidates), key=lambda e: e[0], reverse=True)[0]
+        elif self.filter_type == 'predicate':
+            selected = sorted(map(less_restrictive_faceted, [candidates[0]]), key=lambda e: e[0], reverse=True)[0]
+        else:
+            raise NotImplementedError
         option_amount, predicate, option = selected
         print("selected => predicate: {} | option: {} | matches: {}".format(predicate, option, option_amount))
         return predicate, option
