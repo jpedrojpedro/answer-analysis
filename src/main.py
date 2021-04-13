@@ -11,13 +11,6 @@ from src.flow import heuristic as heuristic_module
 from src import helper
 
 
-def should_stop(df, variable, beta, candidates):
-    if len(df[variable].unique()) <= beta:
-        return True
-    return False if len(candidates) > 0 else True
-
-
-# TODO: implement like Rake-Rails
 class Main:
     def __init__(self, dataset, heuristic):
         self.heuristic = getattr(heuristic_module, 'Heuristic' + heuristic.capitalize())()
@@ -53,7 +46,7 @@ class Main:
             dft, predicate = filtering.apply()
             self.filtered_predicates.append(predicate)
             candidates = [e for e in filtering.all_candidates() if e['predicate'] != predicate]
-            if should_stop(dft, variable, self.heuristic.beta, candidates):
+            if self.should_stop(dft, variable, candidates):
                 break
         ranking = Ranking(dft, self.dataset.uri_inforank)
         dfr = ranking.apply(sort='desc', top=self.heuristic.beta)
@@ -70,6 +63,11 @@ class Main:
         question = options[int(id_selected)]
         print("Question: {}".format(question.question))
         return question
+
+    def should_stop(self, df, variable, candidates):
+        if len(df[variable].unique()) <= self.heuristic.beta:
+            return True
+        return False if len(candidates) > 0 else True
 
 
 if __name__ == '__main__':
