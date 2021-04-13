@@ -3,7 +3,7 @@
   "uri_inforank": "http://www.brainz.quira/inforank",
   "statistics": {
     "resources": "select ?resource (count(*) as ?frequency) where { [] a ?resource } group by ?resource order by desc(?frequency)",
-    "predicates": "select ?predicate (count(*) as ?frequency) where { [] ?predicate ?obj . filter(isLiteral(?obj)) . } group by ?predicate order by desc(?frequency)"
+    "predicates": "select ?predicate (count(*) as ?frequency) where { [] ?predicate [] } group by ?predicate order by desc(?frequency)"
   },
   "prefixes": {
     "dc": "http://purl.org/dc/elements/1.1/",
@@ -17,7 +17,8 @@
     "skos": "http://www.w3.org/2004/02/skos/core#",
     "terms": "http://open.vocab.org/terms/",
     "dbp": "http://dbpedia.org/property/",
-    "dbo": "http://dbpedia.org/ontology/"
+    "dbo": "http://dbpedia.org/ontology/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
   },
   "questions": [
     {
@@ -38,7 +39,7 @@
     {
       "question": "Which songs by Miles Davis are longer than 20 minutes?",
       "keywords": "Miles Davis, song, length over 20 minutes",
-      "query": "SELECT DISTINCT ?track WHERE { ?track rdf:type mo:Track . ?artist foaf:made ?track . ?artist foaf:name 'Miles Davis' . ?track mo:duration ?duration . FILTER( ?duration > 1200000 ). }"
+      "query": "SELECT DISTINCT ?track WHERE { ?track rdf:type mo:Track . ?artist foaf:made ?track . ?artist foaf:name 'Miles Davis' . ?track mo:duration ?duration . FILTER( xsd:integer(?duration) > 1200000 ). }"
     },
     {
       "question": "Which groups was David Bowie a member of?",

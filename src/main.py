@@ -25,6 +25,7 @@ def should_continue(candidates):
 class Main:
     def __init__(self, dataset, heuristic):
         self.heuristic = getattr(heuristic_module, 'Heuristic' + heuristic.capitalize())()
+        print("Heuristica Escolhida: {}".format(self.heuristic.description))
         self.dataset = Dataset(dataset)
         self.filtered_predicates = []
 
@@ -82,5 +83,5 @@ class Main:
 
 if __name__ == '__main__':
     d = input("Informe o dataset desejado (brainz.json):\t") or 'brainz.json'
-    h = input("Informe a heuristica desejada (sigma, pi ou omega):\t") or 'sigma'
+    h = input("Informe a heuristica desejada (*sigma*, pi ou omega):\t") or 'sigma'
     Main(d, h).run()
