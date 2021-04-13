@@ -62,9 +62,9 @@
       "query": "SELECT DISTINCT ?album WHERE { ?artist foaf:made ?album . ?artist foaf:name 'Kraftwerk' . ?album dbp:thisAlbum ?album_title . }"
     },
     {
-      "question": "Which artists were born on the 30th of September 1964?",
+      "question": "Which artists were born on September, 1964?",
       "keywords": "artist, born, 1964-09-30",
-      "query": "SELECT ?artist WHERE { ?artist a mo:MusicArtist . ?artist dbo:birthDate ?date . filter(?date = \"1964-09-30\") . }"
+      "query": "select distinct ?artist where { ?artist a mo:MusicArtist . ?artist dbo:birthDate ?date . filter(regex(?date, \"^1964-09\", \"i\") || regex(?date, \"^1964-9\", \"i\")) . }"
     },
     {
       "question": "Give me all bands which broke up in 2010",

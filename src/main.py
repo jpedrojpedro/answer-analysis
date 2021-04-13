@@ -11,14 +11,10 @@ from src.flow import heuristic as heuristic_module
 from src import helper
 
 
-def should_continue(candidates):
-    print("Predicados disponiveis:")
-    for candidate in candidates:
-        predicate, dist_val, options = candidate.values()
-        print("- {} :: {} distinct values".format(predicate, dist_val))
-    answer = input("Deseja continuar filtrando o resultado? (n):\t") or 'n'
-    print("---------------------------------------------------------------")
-    return False if answer == 'n' else True
+def should_stop(df, variable, beta, candidates):
+    if len(df[variable].unique()) <= beta:
+        return True
+    return False if len(candidates) > 0 else True
 
 
 # TODO: implement like Rake-Rails
@@ -49,21 +45,16 @@ class Main:
         variable = qp.variables[0][1:]  # removing char '?'
         print("Variable: {}".format(variable))
         while True:
-            old_dft = dft.copy()
             frequency = Frequency(dft, getattr(gs, 'predicates'), self.dataset.uri_inforank, self.heuristic.delta)
             dff = frequency.apply()
             filtering = Filtering(
                 dft, dff, variable, self.heuristic, *self.filtered_predicates
             )
             dft, predicate = filtering.apply()
-            # TODO: fix logic of candidates vs selected
-            candidates = filtering.all_candidates()
             self.filtered_predicates.append(predicate)
-            keys = [col for col in dft.columns if col not in ['predicate', 'object']]
-            if len(dft[variable].unique()) <= self.heuristic.beta or helper.check_equality(old_dft, dft, keys=keys):
-                if predicate is None or not should_continue(candidates):
-                    break
-                continue
+            candidates = [e for e in filtering.all_candidates() if e['predicate'] != predicate]
+            if should_stop(dft, variable, self.heuristic.beta, candidates):
+                break
         ranking = Ranking(dft, self.dataset.uri_inforank)
         dfr = ranking.apply(sort='desc', top=self.heuristic.beta)
         df = pd.merge(dfr, dfo, on=variable, how='left')
