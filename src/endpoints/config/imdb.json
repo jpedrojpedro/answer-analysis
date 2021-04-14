@@ -3,7 +3,7 @@
   "uri_inforank": "http://www.quira.org/inforank",
   "statistics": {
     "resources": "select ?resource (count(*) as ?frequency) where { [] a ?resource } group by ?resource order by desc(?frequency)",
-    "predicates": "select ?predicate (count(*) as ?frequency) where { [] ?predicate ?obj . filter(isLiteral(?obj)) . } group by ?predicate order by desc(?frequency)"
+    "predicates": "select ?predicate (count(*) as ?frequency) where { [] ?predicate [] } group by ?predicate order by desc(?frequency)"
   },
   "prefixes": {
     "imdb": "http://www.imdb.com/",
