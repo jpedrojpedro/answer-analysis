@@ -27,6 +27,26 @@
       "question": "Which actors or actresses were born on May 30th?",
       "keywords": "birthday, actor, actress, May 30th",
       "query": "select distinct ?artist where { ?artist a ?klass . ?artist imdb:birth_date ?date . filter(regex(?date, \"^30 May\", \"i\")) . filter(?klass in (imdb:Actor, imdb:Actress)) . }"
+    },
+    {
+      "question": "Which movies were released in 2000?",
+      "keywords": "movie, released, 2000",
+      "query": "select distinct ?movie where { ?movie a imdb:Movie . ?movie imdb:year \"2000\" . }"
+    },
+    {
+      "question": "Which movies were produced in Brazil?",
+      "keywords": "movie, produced, Brazil",
+      "query": "select distinct ?movie where { ?movie a imdb:Movie . ?movie imdb:country ?country . ?country rdfs:label \"Brazil\" }"
+    },
+    {
+      "question": "Which movies were produced in Brazil in 2010?",
+      "keywords": "movie, produced, Brazil",
+      "query": "select distinct ?movie where { ?movie a imdb:Movie . ?movie imdb:year \"2000\" . ?movie imdb:country ?country . ?country rdfs:label \"Brazil\" }"
+    },
+    {
+      "question": "Which brazilian artists starred foreign movies?",
+      "keywords": "artist, brazilian, foreign, work",
+      "query": "select distinct ?artist where { ?movie a imdb:Movie . ?movie imdb:country ?country . ?country rdfs:label ?country_name . filter(?country_name != \"Brazil\") . ?movie ?pred ?artist . ?artist imdb:birth_notes ?birth_place . filter(regex(?birth_place, \"Brazil\")) . filter(?pred in (imdb:actor, imdb:actress)) . }"
     }
   ]
 }
