@@ -72,5 +72,5 @@ class Main:
 
 if __name__ == '__main__':
     d = input("Informe o dataset desejado (brainz.json):\t") or 'brainz.json'
-    h = input("Informe a heuristica desejada (*sigma*, pi ou omega):\t") or 'sigma'
+    h = input("Informe a heuristica desejada (sigma, pi ou omega):\t")
     Main(d, h).run()
