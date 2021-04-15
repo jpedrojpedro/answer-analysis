@@ -38,15 +38,16 @@ class Main:
         variable = qp.variables[0][1:]  # removing char '?'
         print("Variable: {}".format(variable))
         while True:
+            previous_dft = dft.copy()
             frequency = Frequency(dft, getattr(gs, 'predicates'), self.dataset.uri_inforank, self.heuristic.delta)
             dff = frequency.apply()
             filtering = Filtering(
                 dft, dff, variable, self.heuristic, *self.filtered_predicates
             )
-            dft, predicate = filtering.apply()
-            self.filtered_predicates.append(predicate)
-            candidates = [e for e in filtering.all_candidates() if e['predicate'] != predicate]
-            if self.should_stop(dft, variable, candidates):
+            dft, curr_predicate = filtering.apply()
+            if curr_predicate:
+                self.filtered_predicates.append(curr_predicate)
+            if self.should_stop(dft, previous_dft, variable, curr_predicate):
                 break
         ranking = Ranking(dft, self.dataset.uri_inforank)
         dfr = ranking.apply(sort='desc', top=self.heuristic.beta)
@@ -64,10 +65,13 @@ class Main:
         print("Question: {}".format(question.question))
         return question
 
-    def should_stop(self, df, variable, candidates):
+    def should_stop(self, df, df_prev, variable, predicate):
+        keys = [col for col in df.columns if col not in ['predicate', 'object']]
         if len(df[variable].unique()) <= self.heuristic.beta:
             return True
-        return False if len(candidates) > 0 else True
+        if helper.check_equality(df_prev, df, keys=keys) and not predicate:
+            return True
+        return False
 
 
 if __name__ == '__main__':
