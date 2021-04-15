@@ -42,9 +42,9 @@
       "query": "SELECT DISTINCT ?track WHERE { ?track rdf:type mo:Track . ?artist foaf:made ?track . ?artist foaf:name 'Miles Davis' . ?track mo:duration ?duration . FILTER( xsd:integer(?duration) > 1200000 ). }"
     },
     {
-      "question": "Which groups was David Bowie a member of?",
-      "keywords": "David Bowie, member, group",
-      "query": "SELECT DISTINCT ?band WHERE { ?artist foaf:name 'David Bowie' . ?artist mo:member_of ?band . }"
+      "question": "Which artists played on the same groups David Bowie was member of?",
+      "keywords": "David Bowie, member, group, artists",
+      "query": "select distinct ?artist where { ?b_artist foaf:name 'David Bowie' . ?b_artist mo:member_of ?b_band . ?artist mo:member_of ?band . filter(?band = ?b_band) . filter(?artist != ?b_artist) . }"
     },
     {
       "question": "Give me all albums from Michael Jackson",
